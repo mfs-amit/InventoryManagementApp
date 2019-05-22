@@ -1,0 +1,21 @@
+.product_manager mat-toolbar {
+    justify-content: space-between;
+    padding: 0 0 0 16px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+
+.product_manager mat-toolbar button {
+    height: 100%;
+    box-shadow: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.product_manager mat-toolbar button mat-icon{
+    margin-right: 5px;
+
+}
+
+.product_manager_content{
+    margin: 0 5%;
+    padding-top: 20px;
+}

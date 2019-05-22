@@ -1,0 +1,44 @@
+.product_details {
+    margin-top: 15px;
+}
+
+.subHeader {
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.product_details mat-form-field {
+    width: 100%;
+    padding: 10px 0;
+}
+
+.product_details_content {
+    padding: 15px;
+}
+
+.action_buttons {
+    justify-content: flex-end;
+}
+
+.add_button {
+    background: #3f51b5;
+    color: #fff;
+}
+
+.save_button{
+    background: #4CAF50;
+    color: #fff;
+    margin-left: 8px;
+}
+
+.delete_button{
+    background: rgb(214, 52, 52);
+    color: #fff;
+    margin-left: 8px;
+}
+
+.cancel_button{
+    background: orange;
+    color: #fff;
+    margin-left: 8px;
+}

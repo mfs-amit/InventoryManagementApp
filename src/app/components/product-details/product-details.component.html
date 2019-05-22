@@ -1,0 +1,22 @@
+<div class="product_details subBoxex">
+  <mat-toolbar color="primary" class="subHeader">
+    <span>Product Details</span>
+    <span>{{product?.name}}</span>
+  </mat-toolbar>
+  <div class="product_details_content">
+    <mat-form-field>
+      <input matInput placeholder="Name" type="text" [(ngModel)]="product.name">
+    </mat-form-field>
+    <mat-form-field>
+      <span matPrefix>$ &nbsp;</span>
+      <input matInput placeholder="Price" type="text" [(ngModel)]="product.price">
+    </mat-form-field>
+    <app-product-rating [rating]="product.rating" (ratingEvent)="receiveRating($event)"></app-product-rating>
+  </div>
+  <mat-toolbar class="action_buttons">
+    <button mat-raised-button class="add_button" (click)="addProduct()">Add</button>
+    <button mat-raised-button class="save_button" (click)="updateProduct()">Save</button>
+    <button mat-raised-button class="delete_button" (click)="deleteProduct()">Delete</button>
+    <button mat-raised-button class="cancel_button" (click)="cancel(false)">Cancel</button>
+  </mat-toolbar>
+</div>

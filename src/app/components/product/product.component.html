@@ -1,0 +1,19 @@
+<div class="product_manager">
+  <mat-toolbar color="primary">
+    <span>Product Manager</span>
+    <button mat-raised-button color="primary" (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>Logout
+    </button>
+  </mat-toolbar>
+  <div class="product_manager_content">
+    <div class="row">
+      <div class="col-md-3">
+        <app-product-list></app-product-list>
+      </div>
+      <div class="col-md-9">
+        <app-product-stock></app-product-stock>
+        <app-product-details></app-product-details>
+      </div>
+    </div>
+  </div>
+</div>
