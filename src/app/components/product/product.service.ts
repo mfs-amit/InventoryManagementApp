@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { apiUrls } from 'src/environments/environment';
-import { loginApiResponse, product, addProductApiRequest } from 'src/app/shared/models/model';
+import { product, addProductApiRequest } from 'src/app/shared/models/model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +11,6 @@ import { loginApiResponse, product, addProductApiRequest } from 'src/app/shared/
 export class ProductService {
 
   constructor(private http: HttpClient) { }
-
-  logout(): Observable<any> {
-    return this.http.post<any>(apiUrls.logout, '').pipe(catchError(this.handleError));
-  }
 
   getProductList(): Observable<product[]> {
     return this.http.get<product[]>(apiUrls.products).pipe(catchError(this.handleError));
@@ -28,16 +24,22 @@ export class ProductService {
     return this.http.put<product>(apiUrls.products, apiRequest).pipe(catchError(this.handleError));
   }
 
-  deleteProduct(productId: number): Observable<product> {
+  deleteProduct(productId: string): Observable<product> {
     return this.http.delete<product>(apiUrls.products + '/' + productId).pipe(catchError(this.handleError));
   }
 
+  getProductDetail(productId: string): Observable<product> {
+    return this.http.get<product>(apiUrls.products + '/' + productId).pipe(catchError(this.handleError));
+  }
+
+  uploadImage(formData: any): Observable<any> {
+    return this.http.post(apiUrls.uploadImage, formData, {
+      reportProgress: true,
+      observe: "events"
+    })
+  }
+
   private handleError(errorResponse: HttpErrorResponse) {
-    if (errorResponse.error instanceof ErrorEvent) {
-      return throwError('Client side error');
-    }
-    else {
-      return throwError('Server side error')
-    }
+    return throwError(errorResponse.error);
   }
 }

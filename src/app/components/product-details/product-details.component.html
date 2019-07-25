@@ -3,20 +3,73 @@
     <span>Product Details</span>
     <span>{{product?.name}}</span>
   </mat-toolbar>
-  <div class="product_details_content">
+  <div class="product_details_content" [formGroup]="productForm">
+    <div class="row image_form">
+      <div class="col-md-6 image_area">
+        <label for="image">
+          <input id="image" style="display:none;" type="file" accept="image/*" (change)="uploadImage($event)" />
+          <img [src]="imageSrc ? imageSrc : '../../../assets/img/upload.png'" class="upload_image">
+        </label>
+      </div>
+      <div class="col-md-6 form_area">
+        <mat-form-field class="name_field">
+          <input matInput autocomplete="off" placeholder="Name" type="text" formControlName="name">
+          <mat-error
+            *ngIf="productForm.controls.name.hasError('pattern') && !productForm.controls.name.hasError('required')">
+            *Please enter a valid name
+          </mat-error>
+          <mat-error *ngIf="productForm.controls.name.hasError('required')">
+            *Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="quantity_field">
+          <input matInput autocomplete="off" placeholder="Quantity" type="number" formControlName="quantity">
+          <mat-error *ngIf="productForm.controls.quantity.hasError('required')">
+            *Quantity is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="productForm.controls.quantity.hasError('range')">
+            *Please enter valid quantity
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="price_field">
+          <span matPrefix>$ &nbsp;</span>
+          <input matInput autocomplete="off" placeholder="Price" type="number" formControlName="price">
+          <mat-error *ngIf="productForm.controls.price.hasError('required')">
+            *Price is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="productForm.controls.price.hasError('range')">
+            *Please enter valid price
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+
+          <mat-label>Distributor name</mat-label>
+          <mat-select formControlName="distributor">
+            <mat-option *ngFor="let distributor of distributorsList" [value]="distributor.name">
+              {{distributor?.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="productForm.controls.distributor.hasError('required')">
+            *Distributor name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <span class="error_message" *ngIf="!distributorsList.length && getDistributorApiLoaded">*Please add distributor first</span>
+      </div>
+    </div>
     <mat-form-field>
-      <input matInput placeholder="Name" type="text" [(ngModel)]="product.name">
-    </mat-form-field>
-    <mat-form-field>
-      <span matPrefix>$ &nbsp;</span>
-      <input matInput placeholder="Price" type="text" [(ngModel)]="product.price">
+      <textarea matInput placeholder="Description" formControlName="description"></textarea>
     </mat-form-field>
     <app-product-rating [rating]="product.rating" (ratingEvent)="receiveRating($event)"></app-product-rating>
   </div>
   <mat-toolbar class="action_buttons">
-    <button mat-raised-button class="add_button" (click)="addProduct()">Add</button>
-    <button mat-raised-button class="save_button" (click)="updateProduct()">Save</button>
-    <button mat-raised-button class="delete_button" (click)="deleteProduct()">Delete</button>
-    <button mat-raised-button class="cancel_button" (click)="cancel(false)">Cancel</button>
+    <button mat-raised-button class="add_button"
+      [disabled]="productForm.invalid || ratingControl.invalid || !this.product.rating || this.product._id"
+      (click)="addProduct()">Add</button>
+    <button mat-raised-button class="save_button"
+      [disabled]="productForm.invalid || ratingControl.invalid || !this.product.rating || !this.product._id"
+      (click)="updateProduct()">Save</button>
+    <button mat-raised-button class="delete_button" [disabled]="!this.product._id" (click)="alert()">Delete</button>
+    <button mat-raised-button class="cancel_button"
+      [disabled]="productForm.untouched && !imageSrc && !this.product.rating" (click)="cancel(false)">Cancel</button>
   </mat-toolbar>
 </div>

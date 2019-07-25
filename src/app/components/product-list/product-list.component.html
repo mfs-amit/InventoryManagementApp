@@ -1,8 +1,11 @@
 <div class="product_list subBoxex">
   <mat-toolbar color="primary" class="subHeader">Products</mat-toolbar>
+  <div class="no_product" *ngIf="!productsList?.length">
+    <span>Products not available</span>
+  </div>
   <mat-card>
-    <mat-list role="list">
-      <mat-list-item role="listitem" *ngFor="let product of productsList; let i = index"
+    <mat-list role="list" *ngIf="productsList?.length">
+      <mat-list-item class="product_list_item" role="listitem" *ngFor="let product of productsList; let i = index"
         [ngClass]="{active: selectedProduct == i}" (click)="selectProduct(i)">
         <span>{{product?.name}}</span><span>${{product?.price}}</span>
       </mat-list-item>

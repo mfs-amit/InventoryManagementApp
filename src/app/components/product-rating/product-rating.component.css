@@ -1,11 +1,11 @@
 .product_rating_content {
-    padding: 15px;
+    padding: 0 15px 5px 15px;
 }
 
 .product_rating_content mat-form-field {
     width: 100%;
 }
 
-.product_rating {
-    margin-bottom: 25px;
+.error_message {
+    color: red;
 }

@@ -1,0 +1,15 @@
+<div class="distributor_list subBoxex">
+  <mat-toolbar color="primary" class="subHeader">Distributors</mat-toolbar>
+  <div class="no_distributor" *ngIf="!distributorsList?.length">
+    <span>Distributors not available</span>
+  </div>
+  <mat-card>
+    <mat-list role="list" *ngIf="distributorsList?.length">
+      <mat-list-item class="distributor_list_item" role="listitem"
+        *ngFor="let distributor of distributorsList; let i = index" [ngClass]="{active: selectedDistributor == i}"
+        (click)="selectDistributor(i)">
+        <span>{{distributor?.name}}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</div>

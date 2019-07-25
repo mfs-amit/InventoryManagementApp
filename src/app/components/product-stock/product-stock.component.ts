@@ -12,7 +12,7 @@ export class ProductStockComponent {
 
   constructor(private sharedService: ServiceService) {
     this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
-      this.productId = result.id;
+      this.productId = result.quantity;
     })
   }
 }

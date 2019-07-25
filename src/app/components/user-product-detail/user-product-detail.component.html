@@ -1,0 +1,43 @@
+<!-- <mat-toolbar color="primary">
+  <span>Products</span>
+</mat-toolbar> -->
+<!-- <mat-card class="product_detail_container"> -->
+<mat-dialog-content>
+  <div class="closeIcon">
+    <mat-icon (click)="closeDialog()">close</mat-icon>
+  </div>
+  <div class="row">
+    <div class="col-md-5 product_detail_image_area">
+      <img [src]="productDetail?.image ? productDetail?.image : '../../../assets/img/picture.png'"
+        class="product_detail_image">
+    </div>
+    <div class="col-md-7 product_detail_table_area">
+      <table class="product_detail_table">
+        <tr>
+          <td class="table_heading">Name</td>
+          <td>{{productDetail?.name ? productDetail?.name : '-'}}</td>
+        </tr>
+        <tr>
+          <td class="table_heading">Price</td>
+          <td>${{productDetail?.price ? productDetail?.price : '-'}}</td>
+        </tr>
+        <tr>
+          <td class="table_heading">Distributor</td>
+          <td>{{productDetail?.distributor ? productDetail?.distributor : '-'}}</td>
+        </tr>
+        <tr>
+          <td class="table_heading">Description</td>
+          <td>{{productDetail?.description ? productDetail?.description : '-'}}</td>
+        </tr>
+        <tr>
+          <td class="table_heading">Rating</td>
+          <td>
+            <img *ngFor="let star of ratingStars"
+              [src]="star ? '../../../assets/img/color_star.png' : '../../../assets/img/star.png'" class="rating_image">
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</mat-dialog-content>
+<!-- </mat-card> -->

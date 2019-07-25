@@ -4,35 +4,58 @@ export interface loginApiRequest {
 }
 
 export class loginApiResponse {
-    created: string;
-    id: string;
-    ttl: number;
-    userId: number;
+    message: string;
+    token: string;
+    username: string;
+    userType: string;
 
     constructor() {
-        this.created = null;
-        this.id = null;
-        this.ttl = null;
-        this.userId = null;
+        this.message = null;
+        this.token = null;
+        this.username = null;
+        this.userType = null;
     }
 }
 
 export class product {
-    id: number;
+    _id: string;
     name: string;
     price: number;
     rating: number;
-
-    constructor() {
-        this.id = null;
-        this.name = null;
-        this.price = null;
-        this.rating = null;
-    }
+    quantity: number;
+    image: string;
+    description: string;
+    distributor: string;
 }
 
 export interface addProductApiRequest {
     name: string;
     price: number;
     rating: number;
+    quantity: number;
+    image: string;
+    description: string;
+    distributor: string;
 }
+
+export class distributor {
+    _id: string;
+    name: string;
+    email: number;
+    phone: number;
+    address: number;
+    image: string;
+}
+
+export interface addDistributorApiRequest {
+    name: string;
+    email: number;
+    phone: number;
+    address: number;
+    image: string;
+}
+
+export class ImageFile {
+    file: File;
+    uploadProgress: string;
+  }

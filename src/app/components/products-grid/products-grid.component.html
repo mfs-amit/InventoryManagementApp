@@ -1,0 +1,20 @@
+<app-header></app-header>
+
+<div class="mainContainer">
+  <div *ngIf="!productsList?.length" class="no_products">
+    <span>Products not available</span>
+  </div>
+  <div *ngIf="productsList?.length">
+    <div class="col-md-3 product_card_area" *ngFor="let product of productsList">
+      <mat-card class="product_card" (click)="showProductDetail(product)">
+        <div class="product_image_area">
+            <img [src]="product?.image?product?.image:'../../../assets/img/picture.png'" class="product_image">
+        </div>
+        <div class="product_name_price">
+          <span>{{product?.name | titlecase}}</span>
+          <strong>${{product?.price}}</strong>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

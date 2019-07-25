@@ -1,0 +1,43 @@
+.product_detail_image_area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    /* border-right: 1px solid #cecece; */
+}
+
+.product_detail_image {
+    max-width: 100%;
+}
+
+.product_detail_container {
+    margin: 30px;
+}
+
+.product_detail_table {
+    width: 100%;
+}
+
+.table_heading {
+    font-weight: 600;
+}
+
+.product_detail_table td {
+    padding: 10px;
+}
+
+.rating_image {
+    width: 20px;
+    margin-right: 5px;
+}
+
+.closeIcon {
+    text-align: right;
+}
+
+.closeIcon mat-icon {
+    cursor: pointer;
+    position: absolute;
+    margin-top: -25px;
+    font-size: 20px;
+}

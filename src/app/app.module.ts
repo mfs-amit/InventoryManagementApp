@@ -18,7 +18,11 @@ import {
   MatCardModule,
   MatToolbarModule,
   MatIconModule,
-  MatListModule
+  MatListModule,
+  MatSnackBarModule,
+  MatMenuModule,
+  MatDialogModule,
+  MatSelectModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -26,6 +30,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpsInterceptorService } from './shared/interceptors/https-interceptor.service';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ProductsGridComponent } from './components/products-grid/products-grid.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { UserProductDetailComponent } from './components/user-product-detail/user-product-detail.component';
+import { HeaderComponent } from './components/header/header.component';
+import { DistributorComponent } from './components/distributor/distributor.component';
+import { DistributorListComponent } from './components/distributor-list/distributor-list.component';
+import { DistributorDetailsComponent } from './components/distributor-details/distributor-details.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +47,14 @@ import { ToastrModule } from 'ngx-toastr';
     ProductStockComponent,
     ProductDetailsComponent,
     ProductRatingComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProductsGridComponent,
+    AlertComponent,
+    UserProductDetailComponent,
+    HeaderComponent,
+    DistributorComponent,
+    DistributorListComponent,
+    DistributorDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,15 +64,20 @@ import { ToastrModule } from 'ngx-toastr';
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({ maxOpened: 1, autoDismiss: true }),
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatSnackBarModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatSelectModule
   ],
+  entryComponents: [AlertComponent, UserProductDetailComponent],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpsInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })

@@ -2,7 +2,13 @@
   <mat-toolbar color="primary" class="subHeader">Product Rating</mat-toolbar>
   <div class="product_rating_content">
     <mat-form-field>
-      <input type="number" matInput [(ngModel)]="rating" (ngModelChange)="sendRating()">
+      <input type="number" matInput [formControl]="ratingControl" (change)="sendRating()" (input)="sendRating()">
+      <mat-error *ngIf="ratingControl.hasError('required')">
+        *Rating is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="ratingControl.hasError('range')">
+        *Please rate between 0-5
+      </mat-error>
     </mat-form-field>
   </div>
 </div>

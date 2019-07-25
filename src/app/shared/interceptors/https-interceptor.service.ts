@@ -12,18 +12,18 @@ export class HttpsInterceptorService implements HttpInterceptor {
 
   constructor(public router: Router, private toastr: ToastrService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (localStorage.getItem('LoggedInData')) {
-      req = req.clone({ headers: req.headers.set('x-access-token', JSON.parse(localStorage.getItem('LoggedInData')).id) });
+    if (localStorage.getItem('token')) {
+      req = req.clone({ headers: req.headers.set('auth-token', localStorage.getItem('token')) });
     }
     return next.handle(req).pipe(tap(res => {
       if (res instanceof HttpResponse) {
       }
     }, err => {
       if (err instanceof HttpErrorResponse) {
-        console.log(err)
         if (err.status == 401) {
+          localStorage.clear();
           this.router.navigate(['/login']);
-          this.toastr.error('', err.error.error.code);
+          this.toastr.error('', err.error);
         }
       }
     }));

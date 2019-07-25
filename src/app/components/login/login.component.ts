@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoginService } from './login.service';
 import { loginApiRequest, loginApiResponse } from 'src/app/shared/models/model';
 import { ToastrService } from 'ngx-toastr';
+import { ServiceService } from 'src/app/shared/services/service.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   showLoadding: boolean = false;
   loggedInFailed: boolean = false;
 
-  constructor(private router: Router, private loginService: LoginService, private toastr: ToastrService) { }
+  constructor(private sharedService: ServiceService, private router: Router, private loginService: LoginService, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.validateLoginForm();
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.invalid) {
-      this.markFormGroupTouched(this.loginForm);
+      this.sharedService.markFormGroupTouched(this.loginForm);
     } else {
       this.showLoadding = true;
       let apiRequest: loginApiRequest;
@@ -42,23 +43,20 @@ export class LoginComponent implements OnInit {
       this.loginService.login(apiRequest).subscribe((result: loginApiResponse) => {
         this.showLoadding = false;
         this.loggedInData = { ...result };
-        localStorage.setItem('LoggedInData', JSON.stringify(this.loggedInData));
-        this.router.navigate(['/product']);
+        localStorage.setItem('token', this.loggedInData.token);
+        localStorage.setItem('username', this.loggedInData.username);
+        localStorage.setItem('userType', this.loggedInData.userType);
+        if(localStorage.getItem('userType') == 'admin') {
+          this.router.navigate(['/product']);
+        } else {
+          this.router.navigate(['/products']);
+        }
         this.toastr.success('', 'Logged In Successfully');
       }, error => {
         this.showLoadding = false;
         this.loggedInFailed = true;
       });
     }
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup) {
-    (<any>Object).values(formGroup.controls).forEach(control => {
-      control.markAsTouched();
-      if (control.controls) {
-        this.markFormGroupTouched(control);
-      }
-    });
   }
 
 }

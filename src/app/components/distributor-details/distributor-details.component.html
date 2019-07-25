@@ -1,0 +1,64 @@
+<div class="distributor_details subBoxex">
+  <mat-toolbar color="primary" class="subHeader">
+    <span>Distributor Details</span>
+    <span>{{distributor?.name}}</span>
+  </mat-toolbar>
+  <div class="distributor_details_content" [formGroup]="distributorForm">
+    <div class="row image_form">
+      <div class="col-md-6 image_area">
+        <label for="image">
+          <input id="image" style="display:none;" type="file" accept="image/*" (change)="uploadImage($event)" />
+          <img [src]="imageSrc ? imageSrc : '../../../assets/img/upload.png'" class="upload_image">
+        </label>
+      </div>
+      <div class="col-md-6 form_area">
+        <mat-form-field class="name_field">
+          <input matInput autocomplete="off" placeholder="Name" type="text" formControlName="name">
+          <mat-error
+            *ngIf="distributorForm.controls.name.hasError('pattern') && !distributorForm.controls.name.hasError('required')">
+            *Please enter a valid name
+          </mat-error>
+          <mat-error *ngIf="distributorForm.controls.name.hasError('required')">
+            *Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput autocomplete="off" placeholder="Email" type="email" formControlName="email">
+          <mat-error *ngIf="distributorForm.controls.email.hasError('required')">
+            *Email is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="distributorForm.controls.email.hasError('email')">
+            *Please enter valid email
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput autocomplete="off" placeholder="Phone" type="text" formControlName="phone">
+          <mat-error *ngIf="distributorForm.controls.phone.hasError('required')">
+            *Phone is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="distributorForm.controls.phone.hasError('pattern')">
+            *Please enter valid phone
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-form-field>
+      <textarea matInput placeholder="Address" formControlName="address"></textarea>
+      <mat-error *ngIf="distributorForm.controls.address.hasError('required')">
+        *Address is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="distributorForm.controls.address.hasError('pattern')">
+        *Please enter valid address
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-toolbar class="action_buttons">
+    <button mat-raised-button class="add_button" [disabled]="distributorForm.invalid || this.distributor._id"
+      (click)="addDistributor()">Add</button>
+    <button mat-raised-button class="save_button" [disabled]="distributorForm.invalid || !this.distributor._id"
+      (click)="updateDistributor()">Save</button>
+    <button mat-raised-button class="delete_button" [disabled]="!this.distributor._id" (click)="alert()">Delete</button>
+    <button mat-raised-button class="cancel_button" [disabled]="distributorForm.untouched && !imageSrc"
+      (click)="cancel(false)">Cancel</button>
+  </mat-toolbar>
+</div>

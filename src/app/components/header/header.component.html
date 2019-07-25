@@ -1,0 +1,11 @@
+<mat-toolbar color="primary" class="common_header">
+  <span>{{pageUrl == '/product' ? 'Product Manager' : pageUrl == '/distributor' ? 'Distributor Manager' : 'Product'}}</span>
+  <div>
+    <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Hi, {{userName}}<mat-icon>keyboard_arrow_down</mat-icon></button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="userType == 'admin'" [routerLink]="['/product']">Product Manager</button>
+      <button mat-menu-item *ngIf="userType == 'admin'" [routerLink]="['/distributor']">Distributor Manager</button>
+      <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

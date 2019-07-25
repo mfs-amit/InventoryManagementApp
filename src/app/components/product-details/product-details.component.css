@@ -9,11 +9,18 @@
 
 .product_details mat-form-field {
     width: 100%;
-    padding: 10px 0;
 }
 
 .product_details_content {
     padding: 15px;
+}
+
+.quantity_field, .price_field {
+    width: 50% !important;
+}
+
+.name_field, .quantity_field, .price_field {
+    margin-bottom: 10px;
 }
 
 .action_buttons {
@@ -41,4 +48,21 @@
     background: orange;
     color: #fff;
     margin-left: 8px;
+}
+
+.image_area {
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload_image {
+    max-width: 100%;
+    max-height: 190px;
+    cursor: pointer;
+}
+
+.error_message {
+    color: red;
 }
