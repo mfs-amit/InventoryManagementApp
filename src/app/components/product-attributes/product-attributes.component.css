@@ -1,0 +1,35 @@
+.attribute_toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.attribute_content {
+    padding: 15px;
+}
+
+.attribute_content table {
+    width: 100%;
+}
+
+.attribute_content td {
+    padding: 5px;
+}
+
+.attribute_content mat-form-field {
+    width: calc(44% - 10px);
+    margin-right: 5px;
+}
+
+.attribute_content button {
+    min-width: 20px;
+    width: 30px;
+    padding: 0;
+}
+
+.form_elements, .no_attributes {
+    text-align: center;
+}
+
+.errors {
+    color: red;
+}

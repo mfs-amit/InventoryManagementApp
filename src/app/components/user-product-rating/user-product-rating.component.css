@@ -1,0 +1,21 @@
+.product_rating_container {
+    margin-top: 15px;
+}
+
+.product_rating_table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.table_heading {
+    font-weight: 600;
+}
+
+.product_rating_table td {
+    padding: 10px;
+}
+
+.rating_image {
+    width: 20px;
+    margin-right: 5px;
+}

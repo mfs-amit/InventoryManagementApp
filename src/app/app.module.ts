@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { ProductComponent } from './components/product/product.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
-import { ProductStockComponent } from './components/product-stock/product-stock.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductRatingComponent } from './components/product-rating/product-rating.component';
 
@@ -22,7 +21,8 @@ import {
   MatSnackBarModule,
   MatMenuModule,
   MatDialogModule,
-  MatSelectModule
+  MatSelectModule,
+  MatTabsModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -30,13 +30,19 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpsInterceptorService } from './shared/interceptors/https-interceptor.service';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ToastrModule } from 'ngx-toastr';
-import { ProductsGridComponent } from './components/products-grid/products-grid.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { UserProductDetailComponent } from './components/user-product-detail/user-product-detail.component';
 import { HeaderComponent } from './components/header/header.component';
 import { DistributorComponent } from './components/distributor/distributor.component';
 import { DistributorListComponent } from './components/distributor-list/distributor-list.component';
 import { DistributorDetailsComponent } from './components/distributor-details/distributor-details.component';
+import { UserProductViewComponent } from './components/user-product-view/user-product-view.component';
+import { ProductAttributesComponent } from './components/product-attributes/product-attributes.component';
+import { ProductDistributorsComponent } from './components/product-distributors/product-distributors.component';
+import { UserProductOverviewComponent } from './components/user-product-overview/user-product-overview.component';
+import { UserProductInformationComponent } from './components/user-product-information/user-product-information.component';
+import { UserProductDistributorsComponent } from './components/user-product-distributors/user-product-distributors.component';
+import { UserProductRatingComponent } from './components/user-product-rating/user-product-rating.component';
 
 @NgModule({
   declarations: [
@@ -44,17 +50,22 @@ import { DistributorDetailsComponent } from './components/distributor-details/di
     LoginComponent,
     ProductComponent,
     ProductListComponent,
-    ProductStockComponent,
     ProductDetailsComponent,
     ProductRatingComponent,
     PageNotFoundComponent,
-    ProductsGridComponent,
     AlertComponent,
     UserProductDetailComponent,
     HeaderComponent,
     DistributorComponent,
     DistributorListComponent,
-    DistributorDetailsComponent
+    DistributorDetailsComponent,
+    UserProductViewComponent,
+    ProductAttributesComponent,
+    ProductDistributorsComponent,
+    UserProductOverviewComponent,
+    UserProductInformationComponent,
+    UserProductDistributorsComponent,
+    UserProductRatingComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +86,8 @@ import { DistributorDetailsComponent } from './components/distributor-details/di
     MatSnackBarModule,
     MatMenuModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule
   ],
   entryComponents: [AlertComponent, UserProductDetailComponent],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpsInterceptorService, multi: true }],

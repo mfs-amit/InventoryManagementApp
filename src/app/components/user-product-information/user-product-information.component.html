@@ -1,0 +1,9 @@
+<div class="attribute_container">
+  <div class="no_attribute" *ngIf="!attribute.length">Information not available</div>
+  <table class="attribute_table" *ngIf="attribute.length">
+    <tr *ngFor="let attr of attribute">
+      <td class="table_heading">{{attr.attributeKey}}</td>
+      <td>{{attr.attributeValue}}</td>
+    </tr>
+  </table>
+</div>

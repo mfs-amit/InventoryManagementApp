@@ -1,0 +1,23 @@
+<div class="product_rating_container">
+  <table class="product_rating_table">
+    <tr>
+      <td class="table_heading">Rating</td>
+      <td>
+        <img *ngFor="let star of ratingStars; let i = index" (click)="rateProduct(i + 1)"
+          [src]="star ? '../../../assets/img/color_star.png' : '../../../assets/img/star.png'" class="rating_image">
+      </td>
+    </tr>
+    <tr>
+      <td class="table_heading">Comment</td>
+      <td>
+        <textarea rows="6" [(ngModel)]="comments"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <button mat-raised-button color="primary" (click)="submitRating()">Submit</button>
+      </td>
+    </tr>
+  </table>
+</div>

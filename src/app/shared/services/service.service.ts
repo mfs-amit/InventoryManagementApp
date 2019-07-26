@@ -33,6 +33,13 @@ export class ServiceService {
     };
   }
 
+  match_MRP(group: FormGroup) {
+    let MRP = group.controls.mrp.value;
+    let base = group.controls.price.value;
+
+    return base < MRP || !base || !MRP ? null : { 'price': true }
+  }
+
   setProductDetailsComponent(status: product) {
     this.showProductDetailsComponent.next(status);
   }

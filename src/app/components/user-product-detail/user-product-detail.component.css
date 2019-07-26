@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     min-height: 200px;
-    /* border-right: 1px solid #cecece; */
+    min-width: 238px;
 }
 
 .product_detail_image {
@@ -12,23 +12,6 @@
 
 .product_detail_container {
     margin: 30px;
-}
-
-.product_detail_table {
-    width: 100%;
-}
-
-.table_heading {
-    font-weight: 600;
-}
-
-.product_detail_table td {
-    padding: 10px;
-}
-
-.rating_image {
-    width: 20px;
-    margin-right: 5px;
 }
 
 .closeIcon {

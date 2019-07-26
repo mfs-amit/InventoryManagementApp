@@ -1,0 +1,21 @@
+<table class="product_detail_table">
+  <tr>
+    <td class="table_heading">Name</td>
+    <td>{{productDetail?.name ? productDetail?.name : '-'}}</td>
+  </tr>
+  <tr>
+    <td class="table_heading">Price</td>
+    <td>${{productDetail?.price ? productDetail?.mrp : '-'}}</td>
+  </tr>
+  <tr>
+    <td class="table_heading">Description</td>
+    <td>{{productDetail?.description ? productDetail?.description : '-'}}</td>
+  </tr>
+  <tr>
+    <td class="table_heading">Rating</td>
+    <td>
+      <img *ngFor="let star of ratingStars"
+        [src]="star ? '../../../assets/img/color_star.png' : '../../../assets/img/star.png'" class="rating_image">
+    </td>
+  </tr>
+</table>

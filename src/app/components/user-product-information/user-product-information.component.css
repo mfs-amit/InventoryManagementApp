@@ -1,0 +1,21 @@
+.attribute_container {
+    margin-top: 15px;
+}
+
+.attribute_table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.table_heading {
+    font-weight: 600;
+}
+
+.attribute_table td {
+    padding: 10px;
+}
+
+.no_attribute {
+    margin-top: 15px;
+    text-align: center;
+}

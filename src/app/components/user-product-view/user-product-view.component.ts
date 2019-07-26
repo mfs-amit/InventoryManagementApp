@@ -6,11 +6,11 @@ import { MatDialog } from '@angular/material';
 import { UserProductDetailComponent } from '../user-product-detail/user-product-detail.component';
 
 @Component({
-  selector: 'app-products-grid',
-  templateUrl: './products-grid.component.html',
-  styleUrls: ['./products-grid.component.css']
+  selector: 'app-user-product-view',
+  templateUrl: './user-product-view.component.html',
+  styleUrls: ['./user-product-view.component.css']
 })
-export class ProductsGridComponent implements OnInit {
+export class UserProductViewComponent implements OnInit {
   productsList: product[];
 
   constructor(private productService: ProductService, private router: Router, public dialog: MatDialog) { }

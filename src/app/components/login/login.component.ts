@@ -46,7 +46,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', this.loggedInData.token);
         localStorage.setItem('username', this.loggedInData.username);
         localStorage.setItem('userType', this.loggedInData.userType);
-        if(localStorage.getItem('userType') == 'admin') {
+        localStorage.setItem('userId', this.loggedInData._id);
+        if (localStorage.getItem('userType') == 'admin') {
           this.router.navigate(['/product']);
         } else {
           this.router.navigate(['/products']);

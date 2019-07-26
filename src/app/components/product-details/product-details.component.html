@@ -22,48 +22,40 @@
             *Name is <strong>required</strong>
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="quantity_field">
-          <input matInput autocomplete="off" placeholder="Quantity" type="number" formControlName="quantity">
-          <mat-error *ngIf="productForm.controls.quantity.hasError('required')">
-            *Quantity is <strong>required</strong>
+        <mat-form-field class="price_field">
+          <span matPrefix>$ &nbsp;</span>
+          <input matInput autocomplete="off" placeholder="MRP" type="number" formControlName="mrp">
+          <mat-error *ngIf="productForm.controls.mrp.hasError('required')">
+            *MRP is <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="productForm.controls.quantity.hasError('range')">
-            *Please enter valid quantity
+          <mat-error *ngIf="productForm.controls.mrp.hasError('range')">
+            *Please enter valid MRP
           </mat-error>
         </mat-form-field>
         <mat-form-field class="price_field">
           <span matPrefix>$ &nbsp;</span>
-          <input matInput autocomplete="off" placeholder="Price" type="number" formControlName="price">
+          <input matInput autocomplete="off" placeholder="Base price" type="number"
+            formControlName="price">
           <mat-error *ngIf="productForm.controls.price.hasError('required')">
-            *Price is <strong>required</strong>
+            *Base price is <strong>required</strong>
           </mat-error>
           <mat-error *ngIf="productForm.controls.price.hasError('range')">
-            *Please enter valid price
+            *Please enter valid base price
           </mat-error>
         </mat-form-field>
+        <span class="error_message" *ngIf="productForm.hasError('price')">
+          *Base price must be less than MRP
+        </span>
         <mat-form-field>
-
-          <mat-label>Distributor name</mat-label>
-          <mat-select formControlName="distributor">
-            <mat-option *ngFor="let distributor of distributorsList" [value]="distributor.name">
-              {{distributor?.name}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="productForm.controls.distributor.hasError('required')">
-            *Distributor name is <strong>required</strong>
-          </mat-error>
+          <textarea matInput placeholder="Description" formControlName="description"></textarea>
         </mat-form-field>
-        <span class="error_message" *ngIf="!distributorsList.length && getDistributorApiLoaded">*Please add distributor first</span>
       </div>
     </div>
-    <mat-form-field>
-      <textarea matInput placeholder="Description" formControlName="description"></textarea>
-    </mat-form-field>
-    <app-product-rating [rating]="product.rating" (ratingEvent)="receiveRating($event)"></app-product-rating>
+    <app-product-attributes [attributes]="product.attribute" (attributesEvent)="receiveAttributes($event)">
+    </app-product-attributes>
   </div>
   <mat-toolbar class="action_buttons">
-    <button mat-raised-button class="add_button"
-      [disabled]="productForm.invalid || ratingControl.invalid || !this.product.rating || this.product._id"
+    <button mat-raised-button class="add_button" [disabled]="productForm.invalid || this.product._id"
       (click)="addProduct()">Add</button>
     <button mat-raised-button class="save_button"
       [disabled]="productForm.invalid || ratingControl.invalid || !this.product.rating || !this.product._id"

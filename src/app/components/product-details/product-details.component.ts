@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { product, addProductApiRequest, ImageFile, distributor } from 'src/app/shared/models/model';
+import { product, addProductApiRequest, ImageFile, distributor, attribute, userRating } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -22,6 +22,7 @@ export class ProductDetailsComponent implements OnInit {
   ratingControl: FormControl = new FormControl();
   distributorsList: distributor[] = new Array<distributor>();
   getDistributorApiLoaded: boolean = false;
+  attributes: any;
 
   constructor(private productService: ProductService, private distributorService: DistributorService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
@@ -29,10 +30,9 @@ export class ProductDetailsComponent implements OnInit {
         this.product = { ...result };
         this.productForm.patchValue({
           name: this.product.name,
-          quantity: this.product.quantity,
+          mrp: this.product.mrp,
           price: this.product.price,
-          description: this.product.description,
-          distributor: this.product.distributor
+          description: this.product.description
         });
         this.sharedService.markFormGroupTouched(this.productForm);
         this.imageSrc = this.product.image;
@@ -49,12 +49,12 @@ export class ProductDetailsComponent implements OnInit {
     this.distributorService.getDistributorList().subscribe(result => {
       this.distributorsList = [...result];
       this.getDistributorApiLoaded = true;
-      const ctrl = this.productForm.get('distributor');
-      if(this.distributorsList.length) {
-        ctrl.enable();
-      } else {
-        ctrl.disable();
-      }
+      // const ctrl = this.productForm.get('distributor');
+      // if (this.distributorsList.length) {
+      //   ctrl.enable();
+      // } else {
+      //   ctrl.disable();
+      // }
     }, error => {
       this.getDistributorApiLoaded = true;
     })
@@ -79,16 +79,19 @@ export class ProductDetailsComponent implements OnInit {
   validateProductForm() {
     this.productForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.pattern(".*\\S.*")]),
-      quantity: new FormControl('', [Validators.required, this.sharedService.range(0, 10000000000)]),
       price: new FormControl('', [Validators.required, this.sharedService.range(0, 10000000000)]),
-      description: new FormControl(''),
-      distributor: new FormControl({ value: '', disabled: true }, [Validators.required])
-    })
+      mrp: new FormControl('', [Validators.required, this.sharedService.range(0, 10000000000)]),
+      description: new FormControl('')
+    }, this.sharedService.match_MRP)
   }
 
-  receiveRating(rating: FormControl) {
-    this.ratingControl = rating;
-    this.product.rating = rating.value;
+  // receiveRating(rating: FormControl) {
+  //   this.ratingControl = rating;
+  //   this.product.rating = rating.value;
+  // }
+
+  receiveAttributes(attributes: attribute[]) {
+    this.product.attribute = [...attributes];
   }
 
   addProduct() {
@@ -98,12 +101,14 @@ export class ProductDetailsComponent implements OnInit {
       let apiRequest: addProductApiRequest = {
         name: this.productForm.value.name,
         price: this.productForm.value.price,
-        rating: this.product.rating,
-        quantity: this.productForm.value.quantity,
-        image: this.imageSrc,
+        mrp: this.productForm.value.mrp,
+        image: this.imageSrc ? this.imageSrc : '',
         description: this.productForm.value.description,
-        distributor: this.productForm.value.distributor
+        attribute: this.product.attribute ? this.product.attribute : [],
+        rating: new Array<userRating>(),
+        distributor: []
       }
+      console.log(apiRequest)
       this.productService.addProduct(apiRequest).subscribe((results: product) => {
         this.cancel(true);
         this.sharedService.snackBarMethod('Product added successfully.');
@@ -117,12 +122,13 @@ export class ProductDetailsComponent implements OnInit {
     let apiRequest: product = {
       name: this.productForm.value.name,
       price: this.productForm.value.price,
-      rating: this.product.rating,
       _id: this.product._id,
-      quantity: this.productForm.value.quantity,
-      image: this.imageSrc,
+      mrp: this.productForm.value.mrp,
+      image: this.imageSrc ? this.imageSrc : '',
       description: this.productForm.value.description,
-      distributor: this.productForm.value.distributor
+      attribute: this.product.attribute ? this.product.attribute : [],
+      rating: this.product.rating,
+      distributor: []
     }
     this.productService.updateProduct(apiRequest).subscribe((results: product) => {
       this.cancel(true);
@@ -155,7 +161,7 @@ export class ProductDetailsComponent implements OnInit {
 
   cancel(callApi: boolean) {
     this.product = new product();
-    this.ratingControl = new FormControl();
+    // this.ratingControl = new FormControl();
     this.sharedService.setProductDetailsComponent(this.product);
     this.sharedService.setProductListRefresh(callApi);
     this.productForm.reset();
