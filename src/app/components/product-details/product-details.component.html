@@ -34,8 +34,7 @@
         </mat-form-field>
         <mat-form-field class="price_field">
           <span matPrefix>$ &nbsp;</span>
-          <input matInput autocomplete="off" placeholder="Base price" type="number"
-            formControlName="price">
+          <input matInput autocomplete="off" placeholder="Base price" type="number" formControlName="price">
           <mat-error *ngIf="productForm.controls.price.hasError('required')">
             *Base price is <strong>required</strong>
           </mat-error>
@@ -53,15 +52,16 @@
     </div>
     <app-product-attributes [attributes]="product.attribute" (attributesEvent)="receiveAttributes($event)">
     </app-product-attributes>
+    <app-product-distributors [distributors]="product.distributor" (distributorsEvent)="receiveDistributors($event)">
+    </app-product-distributors>
   </div>
   <mat-toolbar class="action_buttons">
     <button mat-raised-button class="add_button" [disabled]="productForm.invalid || this.product._id"
       (click)="addProduct()">Add</button>
-    <button mat-raised-button class="save_button"
-      [disabled]="productForm.invalid || ratingControl.invalid || !this.product.rating || !this.product._id"
+    <button mat-raised-button class="save_button" [disabled]="productForm.invalid || !this.product._id"
       (click)="updateProduct()">Save</button>
     <button mat-raised-button class="delete_button" [disabled]="!this.product._id" (click)="alert()">Delete</button>
     <button mat-raised-button class="cancel_button"
-      [disabled]="productForm.untouched && !imageSrc && !this.product.rating" (click)="cancel(false)">Cancel</button>
+      [disabled]="productForm.untouched && !imageSrc && !this.product.attribute" (click)="cancel(false)">Cancel</button>
   </mat-toolbar>
 </div>

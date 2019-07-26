@@ -28,7 +28,7 @@ export class product {
     description: string;
     attribute: attribute[];
     rating: userRating[];
-    distributor: [];
+    distributor: productDistributor[];
 }
 
 export interface addProductApiRequest {
@@ -39,7 +39,7 @@ export interface addProductApiRequest {
     description: string;
     attribute: attribute[];
     rating: userRating[];
-    distributor: [];
+    distributor: productDistributor[];
 }
 
 export class distributor {
@@ -71,6 +71,16 @@ export class attribute {
     constructor() {
         this.attributeKey = null;
         this.attributeValue = null;
+    }
+}
+
+export class productDistributor {
+    distributorName: string;
+    distributorPrice: string;
+
+    constructor() {
+        this.distributorName = null;
+        this.distributorPrice = null;
     }
 }
 

@@ -11,8 +11,6 @@ export class ProductAttributesComponent implements OnChanges {
   attributesForm: FormGroup;
   @Input() attributes: attribute[];
   @Output() attributesEvent = new EventEmitter<attribute[]>();
-  changeDetection: ChangeDetectionStrategy.OnPush
-
 
   constructor(private formBuilder: FormBuilder) {
     this.attributeFormValidation();
@@ -27,8 +25,6 @@ export class ProductAttributesComponent implements OnChanges {
   ngOnChanges() {
     if (this.attributes) {
       this.setAttributes(this.attributes);
-      // this.getAttribute().markAsTouched();
-      this.attributeEvent();
     } else {
       this.resetAttribute();
     }
@@ -65,8 +61,7 @@ export class ProductAttributesComponent implements OnChanges {
   }
 
   setAttributes(attributeData: attribute[]) {
-    // this.resetAttribute();
-    console.log(attributeData)
+    this.resetAttribute();
     if (attributeData.length) {
       const resEntries = attributeData.map(e => this.createAttribute(e));
       this.attributesForm.setControl('attribute', this.formBuilder.array(resEntries));

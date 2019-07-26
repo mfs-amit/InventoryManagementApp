@@ -1,3 +1,37 @@
-<p>
-  product-distributors works!
-</p>
+<div class="product_rating subBoxex">
+  <mat-toolbar color="primary" class="subHeader attribute_toolbar">
+    <span>Product Distributors</span>
+    <button mat-button (click)="addDistributor()" *ngIf="distributorsList.length">
+      <mat-icon class="material-icons-outlined">add_box</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div class="attribute_content">
+    <div *ngIf="!distributorForm.get('distributor').controls.length && distributorsList.length" class="no_attributes">
+      Click
+      <strong>+</strong> button to add product distributors</div>
+    <div *ngIf="!distributorsList.length" class="no_attributes">Distributors not available</div>
+    <div [formGroup]="distributorForm">
+      <div formArrayName="distributor" *ngFor="let item of distributorForm.get('distributor').controls; let i = index;">
+        <div [formGroupName]="i" class="form_elements">
+
+          <mat-form-field>
+            <mat-label>Distributor</mat-label>
+            <mat-select formControlName="distributorName" (change)="distributorEvent()">
+              <mat-option *ngFor="let distributor of distributorsList" [value]="distributor.name">
+                {{distributor.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="distributorPrice">
+            <input matInput type="number" placeholder="price" formControlName="distributorPrice"
+              (change)="distributorEvent()">
+          </mat-form-field>
+          <span>0</span>
+          <button mat-button (click)="deleteDistributor(i)">
+            <mat-icon class="errors">close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

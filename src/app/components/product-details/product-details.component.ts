@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { product, addProductApiRequest, ImageFile, distributor, attribute, userRating } from 'src/app/shared/models/model';
+import { product, addProductApiRequest, ImageFile, distributor, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -19,8 +19,6 @@ export class ProductDetailsComponent implements OnInit {
   productForm: FormGroup;
   imageData: ImageFile;
   imageSrc: string;
-  ratingControl: FormControl = new FormControl();
-  distributorsList: distributor[] = new Array<distributor>();
   getDistributorApiLoaded: boolean = false;
   attributes: any;
 
@@ -42,22 +40,6 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.validateProductForm();
-    this.getDistributorsList();
-  }
-
-  getDistributorsList() {
-    this.distributorService.getDistributorList().subscribe(result => {
-      this.distributorsList = [...result];
-      this.getDistributorApiLoaded = true;
-      // const ctrl = this.productForm.get('distributor');
-      // if (this.distributorsList.length) {
-      //   ctrl.enable();
-      // } else {
-      //   ctrl.disable();
-      // }
-    }, error => {
-      this.getDistributorApiLoaded = true;
-    })
   }
 
   uploadImage(e) {
@@ -85,13 +67,12 @@ export class ProductDetailsComponent implements OnInit {
     }, this.sharedService.match_MRP)
   }
 
-  // receiveRating(rating: FormControl) {
-  //   this.ratingControl = rating;
-  //   this.product.rating = rating.value;
-  // }
-
   receiveAttributes(attributes: attribute[]) {
     this.product.attribute = [...attributes];
+  }
+
+  receiveDistributors(distributor: productDistributor[]) {
+    this.product.distributor = [...distributor];
   }
 
   addProduct() {
@@ -161,7 +142,6 @@ export class ProductDetailsComponent implements OnInit {
 
   cancel(callApi: boolean) {
     this.product = new product();
-    // this.ratingControl = new FormControl();
     this.sharedService.setProductDetailsComponent(this.product);
     this.sharedService.setProductListRefresh(callApi);
     this.productForm.reset();
