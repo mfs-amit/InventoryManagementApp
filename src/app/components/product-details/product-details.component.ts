@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { product, addProductApiRequest, ImageFile, distributor, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { HttpEventType } from '@angular/common/http';
@@ -20,7 +20,10 @@ export class ProductDetailsComponent implements OnInit {
   imageData: ImageFile;
   imageSrc: string;
   getDistributorApiLoaded: boolean = false;
-  attributes: any;
+  distributorFormArray: FormArray;
+  attributeFormArray: FormArray;
+  distributorInitialValue: productDistributor[] = new Array<productDistributor>();
+  attributeInitialValue: attribute[] = new Array<attribute>();
 
   constructor(private productService: ProductService, private distributorService: DistributorService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
@@ -34,6 +37,8 @@ export class ProductDetailsComponent implements OnInit {
         });
         this.sharedService.markFormGroupTouched(this.productForm);
         this.imageSrc = this.product.image;
+        this.distributorInitialValue = [...this.product.distributor];
+        this.attributeInitialValue = [...this.product.attribute];
       }
     })
   }
@@ -67,12 +72,20 @@ export class ProductDetailsComponent implements OnInit {
     }, this.sharedService.match_MRP)
   }
 
-  receiveAttributes(attributes: attribute[]) {
-    this.product.attribute = [...attributes];
+  receiveAttributes(attributes: FormArray) {
+    this.attributeFormArray = attributes;
+    this.product.attribute = [...attributes.value];
   }
 
-  receiveDistributors(distributor: productDistributor[]) {
-    this.product.distributor = [...distributor];
+  receiveDistributors(distributor: FormArray) {
+    this.distributorFormArray = distributor;
+    this.product.distributor = [...distributor.value];
+  }
+
+  resetDistributorForm() {
+    if (this.product.distributor) {
+      this.distributorInitialValue = [...this.product.distributor];
+    }
   }
 
   addProduct() {
@@ -85,11 +98,10 @@ export class ProductDetailsComponent implements OnInit {
         mrp: this.productForm.value.mrp,
         image: this.imageSrc ? this.imageSrc : '',
         description: this.productForm.value.description,
-        attribute: this.product.attribute ? this.product.attribute : [],
+        attribute: this.product.attribute ? this.product.attribute : new Array<attribute>(),
         rating: new Array<userRating>(),
-        distributor: []
+        distributor: this.product.distributor ? this.product.distributor : new Array<productDistributor>(),
       }
-      console.log(apiRequest)
       this.productService.addProduct(apiRequest).subscribe((results: product) => {
         this.cancel(true);
         this.sharedService.snackBarMethod('Product added successfully.');
@@ -109,7 +121,7 @@ export class ProductDetailsComponent implements OnInit {
       description: this.productForm.value.description,
       attribute: this.product.attribute ? this.product.attribute : [],
       rating: this.product.rating,
-      distributor: []
+      distributor: this.product.distributor
     }
     this.productService.updateProduct(apiRequest).subscribe((results: product) => {
       this.cancel(true);
@@ -142,6 +154,11 @@ export class ProductDetailsComponent implements OnInit {
 
   cancel(callApi: boolean) {
     this.product = new product();
+    this.imageSrc = null;
+    this.distributorInitialValue = new Array<productDistributor>();
+    this.distributorFormArray = null;
+    this.attributeInitialValue = new Array<attribute>();
+    this.attributeFormArray = null;
     this.sharedService.setProductDetailsComponent(this.product);
     this.sharedService.setProductListRefresh(callApi);
     this.productForm.reset();

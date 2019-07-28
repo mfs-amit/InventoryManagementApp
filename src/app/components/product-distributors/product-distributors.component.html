@@ -7,8 +7,7 @@
   </mat-toolbar>
   <div class="attribute_content">
     <div *ngIf="!distributorForm.get('distributor').controls.length && distributorsList.length" class="no_attributes">
-      Click
-      <strong>+</strong> button to add product distributors</div>
+      Click <strong>+</strong> button to add product distributors</div>
     <div *ngIf="!distributorsList.length" class="no_attributes">Distributors not available</div>
     <div [formGroup]="distributorForm">
       <div formArrayName="distributor" *ngFor="let item of distributorForm.get('distributor').controls; let i = index;">
@@ -16,17 +15,28 @@
 
           <mat-form-field>
             <mat-label>Distributor</mat-label>
-            <mat-select formControlName="distributorName" (change)="distributorEvent()">
+            <mat-select formControlName="distributorName" (change)="distributorEvent()" (input)="distributorEvent()">
               <mat-option *ngFor="let distributor of distributorsList" [value]="distributor.name">
                 {{distributor.name}}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="item.controls.distributorName.hasError('required')">*Distributor is
+              <strong>Required</strong></mat-error>
           </mat-form-field>
           <mat-form-field class="distributorPrice">
             <input matInput type="number" placeholder="price" formControlName="distributorPrice"
-              (change)="distributorEvent()">
+              (change)="distributorEvent()" (input)="distributorEvent()">
+            <mat-error *ngIf="item.controls.distributorPrice.hasError('required')">*Price is <strong>Required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="item.controls.distributorPrice.hasError('range') && !item.controls.distributorPrice.hasError('required')">
+              *Price must be between <strong>Base Price</strong> and <strong>MRP</strong>
+            </mat-error>
           </mat-form-field>
-          <span>0</span>
+          <strong
+            [ngStyle]="{'color':item.controls.distributorPrice.value - basePrice > 0 ? '#53d253' : 'red','padding':' 0 20px'}">
+            {{item.controls.distributorPrice.hasError('range') ? '' : item.controls.distributorPrice.value - basePrice > 0 ? '+' + (item.controls.distributorPrice.value - basePrice) : (item.controls.distributorPrice.value - basePrice)}}
+          </strong>
           <button mat-button (click)="deleteDistributor(i)">
             <mat-icon class="errors">close</mat-icon>
           </button>

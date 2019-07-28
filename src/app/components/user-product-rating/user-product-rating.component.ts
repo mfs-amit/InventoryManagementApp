@@ -14,10 +14,16 @@ export class UserProductRatingComponent implements OnInit {
   ratingStars = [0, 0, 0, 0, 0];
   ratingCount: number = 0;
   comments: string = '';
+  showRatingForm: boolean = true;
 
   constructor(private productService: ProductService, private sharedService: ServiceService, private tostr: ToastrService) { }
 
   ngOnInit() {
+    this.productDetail.rating.forEach(obj => {
+      if (obj.userId == localStorage.getItem("userId")) {
+        this.showRatingForm = false;
+      }
+    })
   }
 
   rateProduct(rate: number) {
@@ -49,7 +55,7 @@ export class UserProductRatingComponent implements OnInit {
       description: productDetails.description,
       attribute: productDetails.attribute ? productDetails.attribute : [],
       rating: productDetails.rating,
-      distributor: []
+      distributor: productDetails.distributor
     }
     this.productService.updateProduct(apiRequest).subscribe((results: product) => {
       this.ratingCount = 0;

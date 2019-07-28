@@ -1,3 +1,17 @@
-<p>
-  user-product-distributors works!
-</p>
+<div class="distributor_container">
+  <div class="no_distributor" *ngIf="!distributors.length">Distributors not available</div>
+  <table class="distributor_table" *ngIf="distributors.length">
+    <thead>
+      <tr>
+        <th>Distributor</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let distributor of distributors">
+            <td>{{distributor.distributorName}}</td>
+            <td>{{distributor.distributorPrice}}</td>
+          </tr>
+    </tbody>
+  </table>
+</div>

@@ -13,10 +13,18 @@
       <div formArrayName="attribute" *ngFor="let item of attributesForm.get('attribute').controls; let i = index;">
         <div [formGroupName]="i" class="form_elements">
           <mat-form-field>
-            <input matInput placeholder="Type" formControlName="attributeKey" (change)="attributeEvent()">
+            <input matInput placeholder="Attribute" formControlName="attributeKey" (change)="attributeEvent()">
+            <mat-error *ngIf="item.controls.attributeKey.hasError('required')">*Attribute is
+              <strong>Required</strong></mat-error>
+            <mat-error *ngIf="item.controls.attributeKey.hasError('pattern')">*Please enter valid attribute
+            </mat-error>
           </mat-form-field>
           <mat-form-field>
             <input matInput placeholder="Detail" formControlName="attributeValue" (change)="attributeEvent()">
+            <mat-error *ngIf="item.controls.attributeValue.hasError('required')">*Attribute detail is
+              <strong>Required</strong></mat-error>
+            <mat-error *ngIf="item.controls.attributeValue.hasError('pattern')">*Please enter valid attribute detail
+            </mat-error>
           </mat-form-field>
           <button mat-button (click)="deleteAttribute(i)">
             <mat-icon class="errors">close</mat-icon>

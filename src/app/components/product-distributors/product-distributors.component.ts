@@ -1,7 +1,8 @@
 import { Component, OnChanges, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { distributor, productDistributor } from 'src/app/shared/models/model';
 import { DistributorService } from '../distributor/distributor.service';
+import { ServiceService } from 'src/app/shared/services/service.service';
 
 @Component({
   selector: 'app-product-distributors',
@@ -11,15 +12,26 @@ import { DistributorService } from '../distributor/distributor.service';
 export class ProductDistributorsComponent implements OnInit, OnChanges {
   distributorForm: FormGroup;
   @Input() distributors: productDistributor[];
-  @Output() distributorsEvent = new EventEmitter<productDistributor[]>();
+  @Input() mrp: number = 0;
+  @Input() basePrice: number = 0;
+  @Output() distributorsEvent = new EventEmitter<FormArray>();
   distributorsList: distributor[] = new Array<distributor>();
 
-  constructor(private formBuilder: FormBuilder, private distributorService: DistributorService) {
+  constructor(private formBuilder: FormBuilder, private distributorService: DistributorService, private sharedService: ServiceService) {
     this.distributorFormValidation();
   }
 
   ngOnInit() {
     this.getDistributorsList();
+  }
+
+  ngOnChanges(changes) {
+    if ('distributors' in changes && this.distributors) {
+      this.setDistributor(this.distributors);
+      this.distributorEvent();
+    } else {
+      this.sharedService.markFormGroupTouched(this.getDistributor());
+    }
   }
 
   getDistributorsList() {
@@ -34,18 +46,10 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges() {
-    if (this.distributors) {
-      this.setDistributor(this.distributors);
-    } else {
-      this.resetDistributor();
-    }
-  }
-
-  createDistributor(attribute: productDistributor): FormGroup {
+  createDistributor(distributor: productDistributor): FormGroup {
     return this.formBuilder.group({
-      distributorName: attribute.distributorName,
-      distributorPrice: attribute.distributorPrice
+      distributorName: new FormControl(distributor.distributorName, [Validators.required]),
+      distributorPrice: new FormControl(distributor.distributorPrice, [Validators.required, this.sharedService.priceRange(this.basePrice, this.mrp)])
     });
   }
 
@@ -55,8 +59,8 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
 
   addDistributor() {
     let initialData = {
-      distributorName: '',
-      distributorPrice: ''
+      distributorName: null,
+      distributorPrice: null
     }
     this.getDistributor().push(this.createDistributor(initialData));
   }
@@ -72,20 +76,18 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
     }
   }
 
-  setDistributor(attributeData: productDistributor[]) {
-    this.resetDistributor();
-    if (attributeData.length) {
-      const resEntries = attributeData.map(e => this.createDistributor(e));
+  setDistributor(distributorData: productDistributor[]) {
+    if (distributorData.length) {
+      const resEntries = distributorData.map(e => this.createDistributor(e));
       this.distributorForm.setControl('distributor', this.formBuilder.array(resEntries));
+      this.sharedService.markFormGroupTouched(this.getDistributor());
+    } else {
+      this.resetDistributor();
     }
   }
 
   distributorEvent() {
-    this.distributorsEvent.emit(this.distributorForm.value.distributor);
-  }
-
-  check(e) {
-    console.log(e)
+    this.distributorsEvent.emit(this.getDistributor());
   }
 
 }

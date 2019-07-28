@@ -29,6 +29,18 @@ export class product {
     attribute: attribute[];
     rating: userRating[];
     distributor: productDistributor[];
+
+    constructor() {
+        this._id = null;
+        this.name = null;
+        this.price = null;
+        this.mrp = null;
+        this.image = null;
+        this.description = null;
+        this.attribute = new Array<attribute>();
+        this.rating = new Array<userRating>();
+        this.distributor = new Array<productDistributor>();
+    }
 }
 
 export interface addProductApiRequest {
@@ -76,7 +88,7 @@ export class attribute {
 
 export class productDistributor {
     distributorName: string;
-    distributorPrice: string;
+    distributorPrice: number;
 
     constructor() {
         this.distributorName = null;

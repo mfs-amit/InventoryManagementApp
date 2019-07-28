@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { product, distributor } from '../models/model';
-import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormGroup, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class ServiceService {
 
   constructor(private snackBar: MatSnackBar) { }
 
-  markFormGroupTouched(formGroup: FormGroup) {
+  markFormGroupTouched(formGroup: FormGroup | FormArray) {
     (<any>Object).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
       if (control.controls) {
@@ -27,6 +27,15 @@ export class ServiceService {
   range(min: number, max: number): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
       if (control.value !== undefined && (isNaN(control.value) || control.value < min || control.value > max)) {
+        return { 'range': true };
+      }
+      return null;
+    };
+  }
+
+  priceRange(basePrice: number, mrp: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value !== undefined && (isNaN(control.value) || control.value <= basePrice || control.value > mrp)) {
         return { 'range': true };
       }
       return null;

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { productDistributor } from 'src/app/shared/models/model';
 
 @Component({
   selector: 'app-user-product-distributors',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-product-distributors.component.css']
 })
 export class UserProductDistributorsComponent implements OnInit {
+  @Input() distributors: productDistributor[] = new Array<productDistributor>();
 
   constructor() { }
 

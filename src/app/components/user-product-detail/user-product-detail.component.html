@@ -16,7 +16,7 @@
           <app-user-product-information [attribute]="productDetail.attribute"></app-user-product-information>
         </mat-tab>
         <mat-tab label="Distributors">
-          <app-user-product-distributors></app-user-product-distributors>
+          <app-user-product-distributors [distributors]="productDetail.distributor"></app-user-product-distributors>
         </mat-tab>
         <mat-tab label="Rating">
           <app-user-product-rating [productDetail]="productDetail"></app-user-product-rating>

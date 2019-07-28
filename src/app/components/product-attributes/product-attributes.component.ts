@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { attribute } from 'src/app/shared/models/model';
+import { ServiceService } from 'src/app/shared/services/service.service';
 
 @Component({
   selector: 'app-product-attributes',
@@ -10,9 +11,9 @@ import { attribute } from 'src/app/shared/models/model';
 export class ProductAttributesComponent implements OnChanges {
   attributesForm: FormGroup;
   @Input() attributes: attribute[];
-  @Output() attributesEvent = new EventEmitter<attribute[]>();
+  @Output() attributesEvent = new EventEmitter<FormArray>();
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private sharedService: ServiceService) {
     this.attributeFormValidation();
   }
 
@@ -25,15 +26,16 @@ export class ProductAttributesComponent implements OnChanges {
   ngOnChanges() {
     if (this.attributes) {
       this.setAttributes(this.attributes);
+      this.attributeEvent();
     } else {
-      this.resetAttribute();
+      this.sharedService.markFormGroupTouched(this.getAttribute());
     }
   }
 
   createAttribute(attribute: attribute): FormGroup {
     return this.formBuilder.group({
-      attributeKey: attribute.attributeKey,
-      attributeValue: attribute.attributeValue
+      attributeKey: new FormControl(attribute.attributeKey, [Validators.required, Validators.pattern(".*\\S.*")]),
+      attributeValue: new FormControl(attribute.attributeValue, [Validators.required, Validators.pattern(".*\\S.*")])
     });
   }
 
@@ -61,14 +63,16 @@ export class ProductAttributesComponent implements OnChanges {
   }
 
   setAttributes(attributeData: attribute[]) {
-    this.resetAttribute();
     if (attributeData.length) {
       const resEntries = attributeData.map(e => this.createAttribute(e));
       this.attributesForm.setControl('attribute', this.formBuilder.array(resEntries));
+      this.sharedService.markFormGroupTouched(this.getAttribute());
+    } else {
+      this.resetAttribute();
     }
   }
 
   attributeEvent() {
-    this.attributesEvent.emit(this.attributesForm.value.attribute);
+    this.attributesEvent.emit(this.getAttribute());
   }
 }

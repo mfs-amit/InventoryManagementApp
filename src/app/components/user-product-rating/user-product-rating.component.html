@@ -1,5 +1,8 @@
 <div class="product_rating_container">
-  <table class="product_rating_table">
+  <div *ngIf="!showRatingForm" class="thanks_for_rating">
+    Thanks for rating this product.
+  </div>
+  <table class="product_rating_table" *ngIf="showRatingForm">
     <tr>
       <td class="table_heading">Rating</td>
       <td>
