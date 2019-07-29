@@ -39,4 +39,8 @@ export class ProductListComponent implements OnInit {
     this.selectedProduct = index;
     this.sharedService.setProductDetailsComponent(this.productsList[index]);
   }
+
+  addProduct() {
+    this.sharedService.setEnableDisableForm(true);
+  }
 }

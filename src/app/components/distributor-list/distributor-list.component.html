@@ -1,5 +1,10 @@
 <div class="distributor_list subBoxex">
-  <mat-toolbar color="primary" class="subHeader">Distributors</mat-toolbar>
+  <mat-toolbar color="primary" class="subHeader distributor_toolbar">
+    <span>Distributors</span>
+    <button mat-button (click)="addDistributor()">
+      <mat-icon class="material-icons-outlined">add_box</mat-icon>
+    </button>
+  </mat-toolbar>
   <div class="no_distributor" *ngIf="!distributorsList?.length">
     <span>Distributors not available</span>
   </div>

@@ -26,6 +26,10 @@ export class DistributorListComponent implements OnInit {
     this.getDistributorList();
   }
 
+  addDistributor() {
+    this.sharedService.setEnableDisableForm(true);
+  }
+
   getDistributorList() {
     this.distributorService.getDistributorList().subscribe((results: distributor[]) => {
       this.distributorsList = [...results];

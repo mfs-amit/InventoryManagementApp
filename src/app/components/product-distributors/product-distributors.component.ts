@@ -16,9 +16,15 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
   @Input() basePrice: number = 0;
   @Output() distributorsEvent = new EventEmitter<FormArray>();
   distributorsList: distributor[] = new Array<distributor>();
+  showAddButton: boolean;
 
   constructor(private formBuilder: FormBuilder, private distributorService: DistributorService, private sharedService: ServiceService) {
     this.distributorFormValidation();
+    this.sharedService.getEnableDisableForm().subscribe(result => {
+      if (result) {
+        this.showAddButton = true;
+      }
+    });
   }
 
   ngOnInit() {
@@ -71,6 +77,7 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
   }
 
   resetDistributor() {
+    this.showAddButton = false;
     while (this.getDistributor().length !== 0) {
       this.getDistributor().removeAt(0)
     }
@@ -78,6 +85,7 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
 
   setDistributor(distributorData: productDistributor[]) {
     if (distributorData.length) {
+      this.showAddButton = true;
       const resEntries = distributorData.map(e => this.createDistributor(e));
       this.distributorForm.setControl('distributor', this.formBuilder.array(resEntries));
       this.sharedService.markFormGroupTouched(this.getDistributor());

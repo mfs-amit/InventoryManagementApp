@@ -31,3 +31,13 @@
     font-size: 15px !important;
     height: 35px !important;
 }
+
+.distributor_toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.distributor_toolbar button {
+    padding: 0;
+    text-align: right;
+}

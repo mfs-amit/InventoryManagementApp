@@ -31,3 +31,13 @@
     font-size: 15px !important;
     height: 35px !important;
 }
+
+.productList_toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.productList_toolbar button {
+    padding: 0 !important;
+    text-align: right !important;
+}

@@ -1,5 +1,10 @@
 <div class="product_list subBoxex">
-  <mat-toolbar color="primary" class="subHeader">Products</mat-toolbar>
+  <mat-toolbar color="primary" class="subHeader productList_toolbar">
+    <span>Products</span>
+    <button mat-button (click)="addProduct()">
+      <mat-icon class="material-icons-outlined">add_box</mat-icon>
+    </button>
+  </mat-toolbar>
   <div class="no_product" *ngIf="!productsList?.length">
     <span>Products not available</span>
   </div>

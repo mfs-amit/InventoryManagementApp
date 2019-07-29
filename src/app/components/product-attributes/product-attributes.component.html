@@ -1,7 +1,7 @@
 <div class="product_rating subBoxex">
   <mat-toolbar color="primary" class="subHeader attribute_toolbar">
     <span>Product Attributes</span>
-    <button mat-button (click)="addAttribute()">
+    <button mat-button (click)="addAttribute()" *ngIf="showAddButton">
       <mat-icon class="material-icons-outlined">add_box</mat-icon>
     </button>
   </mat-toolbar>

@@ -66,13 +66,13 @@
     <app-product-rating *ngIf="this.product._id" [productRatings]="product.rating"></app-product-rating>
   </div>
   <mat-toolbar class="action_buttons">
-    <button mat-raised-button class="add_button" *ngIf="!this.product._id"
+    <button mat-raised-button class="add_button" *ngIf="!this.product._id && productFormActive"
       [disabled]="productForm.invalid || distributorFormArray.invalid || attributeFormArray.invalid || this.product._id"
       (click)="addProduct()">Add</button>
     <button mat-raised-button class="save_button" *ngIf="this.product._id"
       [disabled]="productForm.invalid || distributorFormArray.invalid || attributeFormArray.invalid"
       (click)="updateProduct()">Save</button>
     <button mat-raised-button class="delete_button" *ngIf="this.product._id" (click)="alert()">Delete</button>
-    <button mat-raised-button class="cancel_button" (click)="cancel(false)">Cancel</button>
+    <button mat-raised-button class="cancel_button" *ngIf="this.product._id || productFormActive" (click)="cancel(false)">Cancel</button>
   </mat-toolbar>
 </div>

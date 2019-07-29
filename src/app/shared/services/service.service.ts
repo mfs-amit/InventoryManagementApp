@@ -12,6 +12,7 @@ export class ServiceService {
   private refreshProductList = new Subject<boolean>();
   private showDistributorDetailsComponent = new Subject<distributor>();
   private refreshDistributorList = new Subject<boolean>();
+  private enableDisableForm = new Subject<boolean>();
 
   constructor(private snackBar: MatSnackBar) { }
 
@@ -88,6 +89,14 @@ export class ServiceService {
 
   getDistributorListRefresh(): Observable<boolean> {
     return this.refreshDistributorList.asObservable();
+  }
+
+  setEnableDisableForm(status: boolean) {
+    this.enableDisableForm.next(status);
+  }
+
+  getEnableDisableForm(): Observable<boolean> {
+    return this.enableDisableForm.asObservable();
   }
 
   snackBarMethod(message: string) {

@@ -1,7 +1,7 @@
 <div class="product_rating subBoxex">
   <mat-toolbar color="primary" class="subHeader attribute_toolbar">
     <span>Product Distributors</span>
-    <button mat-button (click)="addDistributor()" *ngIf="distributorsList.length">
+    <button mat-button (click)="addDistributor()" *ngIf="distributorsList.length && showAddButton">
       <mat-icon class="material-icons-outlined">add_box</mat-icon>
     </button>
   </mat-toolbar>

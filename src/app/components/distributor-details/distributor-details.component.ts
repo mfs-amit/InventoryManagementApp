@@ -19,6 +19,7 @@ export class DistributorDetailsComponent implements OnInit {
   distributorForm: FormGroup;
   imageData: ImageFile;
   imageSrc: string;
+  distributorFormActive: boolean;
 
   constructor(private distributorService: DistributorService, private uploadService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.sharedService.getDistributorDetailsComponent().subscribe((result: distributor) => {
@@ -31,13 +32,22 @@ export class DistributorDetailsComponent implements OnInit {
           phone: this.distributor.phone
         });
         this.sharedService.markFormGroupTouched(this.distributorForm);
+        this.distributorForm.enable();
         this.imageSrc = this.distributor.image;
+      }
+    });
+    this.sharedService.getEnableDisableForm().subscribe(result => {
+      if (result) {
+        this.distributorForm.enable();
+        this.distributorFormActive = true;
       }
     })
   }
 
   ngOnInit() {
     this.validateDistributorForm();
+    this.distributorForm.disable();
+    this.distributorFormActive = false;
   }
 
   uploadImage(e) {
@@ -129,6 +139,8 @@ export class DistributorDetailsComponent implements OnInit {
     this.sharedService.setDistributorDetailsComponent(this.distributor);
     this.sharedService.setDistributorListRefresh(callApi);
     this.distributorForm.reset();
+    this.distributorForm.disable();
+    this.distributorFormActive = false;
   }
 
 }

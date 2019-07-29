@@ -54,12 +54,13 @@
     </mat-form-field>
   </div>
   <mat-toolbar class="action_buttons">
-    <button mat-raised-button class="add_button" [disabled]="distributorForm.invalid || this.distributor._id"
-      (click)="addDistributor()">Add</button>
-    <button mat-raised-button class="save_button" [disabled]="distributorForm.invalid || !this.distributor._id"
-      (click)="updateDistributor()">Save</button>
-    <button mat-raised-button class="delete_button" [disabled]="!this.distributor._id" (click)="alert()">Delete</button>
-    <button mat-raised-button class="cancel_button" [disabled]="distributorForm.untouched && !imageSrc"
+    <button mat-raised-button class="add_button" *ngIf="!this.distributor._id && distributorFormActive"
+      [disabled]="distributorForm.invalid" (click)="addDistributor()">Add</button>
+    <button mat-raised-button class="save_button" *ngIf="this.distributor._id"
+      [disabled]="distributorForm.invalid || !this.distributor._id" (click)="updateDistributor()">Save</button>
+    <button mat-raised-button class="delete_button" *ngIf="this.distributor._id" [disabled]="!this.distributor._id"
+      (click)="alert()">Delete</button>
+    <button mat-raised-button class="cancel_button" *ngIf="this.distributor._id || distributorFormActive"
       (click)="cancel(false)">Cancel</button>
   </mat-toolbar>
 </div>

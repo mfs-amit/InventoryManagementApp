@@ -25,17 +25,26 @@ export class ProductDetailsComponent implements OnInit {
   distributorInitialValue: productDistributor[] = new Array<productDistributor>();
   attributeInitialValue: attribute[] = new Array<attribute>();
   ratingStars = [0, 0, 0, 0, 0];
+  productFormActive: boolean;
 
   constructor(private productService: ProductService, private distributorService: DistributorService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
       if (result._id) {
         this.getProductDetail(result._id);
       }
-    })
+    });
+    this.sharedService.getEnableDisableForm().subscribe(result => {
+      if (result) {
+        this.productForm.enable();
+        this.productFormActive = true;
+      }
+    });
   }
 
   ngOnInit() {
     this.validateProductForm();
+    this.productForm.disable();
+    this.productFormActive = false;
   }
 
   getProductDetail(productId: string) {
@@ -48,6 +57,7 @@ export class ProductDetailsComponent implements OnInit {
         description: this.product.description
       });
       this.sharedService.markFormGroupTouched(this.productForm);
+      this.productForm.enable();
       this.imageSrc = this.product.image;
       this.distributorInitialValue = [...this.product.distributor];
       this.attributeInitialValue = [...this.product.attribute];
@@ -176,5 +186,7 @@ export class ProductDetailsComponent implements OnInit {
     this.sharedService.setProductDetailsComponent(this.product);
     this.sharedService.setProductListRefresh(callApi);
     this.productForm.reset();
+    this.productForm.disable();
+    this.productFormActive = false;
   }
 }
