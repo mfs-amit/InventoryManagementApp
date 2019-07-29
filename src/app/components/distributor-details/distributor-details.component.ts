@@ -61,7 +61,8 @@ export class DistributorDetailsComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.pattern(".*\\S.*")]),
       email: new FormControl('', [Validators.required, Validators.email]),
       address: new FormControl('', [Validators.required, Validators.pattern(".*\\S.*")]),
-      phone: new FormControl('', [Validators.required, Validators.pattern("[0-9]{6,11}")])
+      phone: new FormControl('', [Validators.required, Validators.pattern("[0-9]{6,11}")]),
+      image: new FormControl('')
     })
   }
 

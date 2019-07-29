@@ -81,7 +81,8 @@ export class ProductDetailsComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.pattern(".*\\S.*")]),
       price: new FormControl('', [Validators.required, this.sharedService.range(0, 10000000000)]),
       mrp: new FormControl('', [Validators.required, this.sharedService.range(0, 10000000000)]),
-      description: new FormControl('')
+      description: new FormControl(''),
+      image: new FormControl('')
     }, this.sharedService.match_MRP)
   }
 

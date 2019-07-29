@@ -7,7 +7,8 @@
     <div class="row image_form">
       <div class="col-md-6 image_area">
         <label for="image">
-          <input id="image" style="display:none;" type="file" accept="image/*" (change)="uploadImage($event)" />
+          <input id="image" style="display:none;" type="file" accept="image/*" formControlName="image"
+            (change)="uploadImage($event)" />
           <img [src]="imageSrc ? imageSrc : '../../../assets/img/upload.png'" class="upload_image">
         </label>
       </div>
