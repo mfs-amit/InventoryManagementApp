@@ -18,20 +18,16 @@ const productSchema = mongoose.Schema({
         required: true
     },
     image: {
-        type: String,
-        required: false
+        type: String
     },
     description: {
-        type: String,
-        required: false
+        type: String
     },
     distributor: {
-        type: Array,
-        required: false
+        type: Array
     },
     attribute: {
-        type: Array,
-        required: false
+        type: Array
     }
 });
 
