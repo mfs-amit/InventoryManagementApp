@@ -35,8 +35,12 @@ export class ProductDetailsComponent implements OnInit {
     });
     this.sharedService.getEnableDisableForm().subscribe(result => {
       if (result) {
+        this.cancel(false);
         this.productForm.enable();
         this.productFormActive = true;
+      } else {
+        this.productForm.disable();
+        this.productFormActive = false;
       }
     });
   }
@@ -177,8 +181,8 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   cancel(callApi: boolean) {
-    this.product = new product();
     this.imageSrc = null;
+    this.product = new product();
     this.distributorInitialValue = new Array<productDistributor>();
     this.distributorFormArray = null;
     this.attributeInitialValue = new Array<attribute>();
@@ -186,7 +190,6 @@ export class ProductDetailsComponent implements OnInit {
     this.sharedService.setProductDetailsComponent(this.product);
     this.sharedService.setProductListRefresh(callApi);
     this.productForm.reset();
-    this.productForm.disable();
-    this.productFormActive = false;
+    this.sharedService.setEnableDisableForm(false);
   }
 }

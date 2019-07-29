@@ -55,7 +55,7 @@ export class ServiceService {
     productRatings.forEach(obj => {
       totalRating = totalRating + obj.rating;
     })
-    let averageRating = ((((totalRating / (productRatings.length * 5)) * 100) * 5) / 100);
+    let averageRating = totalRating / productRatings.length;
     return Math.round(averageRating);
   }
 

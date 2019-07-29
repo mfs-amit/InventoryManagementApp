@@ -19,6 +19,8 @@ export class ProductAttributesComponent implements OnChanges {
     this.sharedService.getEnableDisableForm().subscribe(result => {
       if (result) {
         this.showAddButton = true;
+      } else {
+        this.showAddButton = false;
       }
     });
   }
@@ -63,7 +65,6 @@ export class ProductAttributesComponent implements OnChanges {
   }
 
   resetAttribute() {
-    this.showAddButton = false;
     while (this.getAttribute().length !== 0) {
       this.getAttribute().removeAt(0)
     }
@@ -71,7 +72,6 @@ export class ProductAttributesComponent implements OnChanges {
 
   setAttributes(attributeData: attribute[]) {
     if (attributeData.length) {
-      this.showAddButton = true;
       const resEntries = attributeData.map(e => this.createAttribute(e));
       this.attributesForm.setControl('attribute', this.formBuilder.array(resEntries));
       this.sharedService.markFormGroupTouched(this.getAttribute());

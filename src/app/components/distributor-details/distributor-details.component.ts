@@ -38,6 +38,7 @@ export class DistributorDetailsComponent implements OnInit {
     });
     this.sharedService.getEnableDisableForm().subscribe(result => {
       if (result) {
+        this.cancel(false);
         this.distributorForm.enable();
         this.distributorFormActive = true;
       }
@@ -135,6 +136,7 @@ export class DistributorDetailsComponent implements OnInit {
   }
 
   cancel(callApi: boolean) {
+    this.imageSrc = null;
     this.distributor = new distributor();
     this.sharedService.setDistributorDetailsComponent(this.distributor);
     this.sharedService.setDistributorListRefresh(callApi);

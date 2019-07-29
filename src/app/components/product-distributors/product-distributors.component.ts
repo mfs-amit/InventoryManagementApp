@@ -23,6 +23,8 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
     this.sharedService.getEnableDisableForm().subscribe(result => {
       if (result) {
         this.showAddButton = true;
+      } else {
+        this.showAddButton = false;
       }
     });
   }
@@ -77,7 +79,6 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
   }
 
   resetDistributor() {
-    this.showAddButton = false;
     while (this.getDistributor().length !== 0) {
       this.getDistributor().removeAt(0)
     }
@@ -85,7 +86,6 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
 
   setDistributor(distributorData: productDistributor[]) {
     if (distributorData.length) {
-      this.showAddButton = true;
       const resEntries = distributorData.map(e => this.createDistributor(e));
       this.distributorForm.setControl('distributor', this.formBuilder.array(resEntries));
       this.sharedService.markFormGroupTouched(this.getDistributor());

@@ -17,7 +17,7 @@
 
           <mat-form-field>
             <mat-label>Distributor</mat-label>
-            <mat-select formControlName="distributorName" (change)="distributorEvent()" (input)="distributorEvent()">
+            <mat-select formControlName="distributorName" (selectionChange)="distributorEvent()">
               <mat-option *ngFor="let distributor of distributorsList" [value]="distributor.name">
                 {{distributor.name}}
               </mat-option>
