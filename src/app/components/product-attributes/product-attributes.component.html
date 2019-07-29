@@ -6,11 +6,12 @@
     </button>
   </mat-toolbar>
   <div class="attribute_content">
-    <div *ngIf="!attributesForm.get('attribute').controls.length" class="no_attributes">Click <strong>+</strong> button
+    <div *ngIf="!attributesForm.get('attribute')['controls'].length" class="no_attributes">Click <strong>+</strong>
+      button
       to
       add product attributes</div>
     <div [formGroup]="attributesForm">
-      <div formArrayName="attribute" *ngFor="let item of attributesForm.get('attribute').controls; let i = index;">
+      <div formArrayName="attribute" *ngFor="let item of attributesForm.get('attribute')['controls']; let i = index;">
         <div [formGroupName]="i" class="form_elements">
           <mat-form-field>
             <input matInput placeholder="Attribute" formControlName="attributeKey" (change)="attributeEvent()">

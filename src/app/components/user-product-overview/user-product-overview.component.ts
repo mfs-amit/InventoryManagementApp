@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { product } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
+import { ServiceService } from 'src/app/shared/services/service.service';
 
 @Component({
   selector: 'app-user-product-overview',
@@ -12,7 +13,7 @@ export class UserProductOverviewComponent implements OnInit {
   ratingStars = [0, 0, 0, 0, 0];
   averageRating: number = 0;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private sharedService: ServiceService) { }
 
   ngOnInit() {
     this.getAverageRating(this.productDetail._id);
@@ -30,13 +31,7 @@ export class UserProductOverviewComponent implements OnInit {
   getAverageRating(productId: string) {
     this.productService.getProductDetail(productId).subscribe(result => {
       this.productDetail = { ...result };
-      let totalRating: number = 0;
-      this.productDetail.rating.forEach(obj => {
-        totalRating = totalRating + obj.rating;
-      })
-      let averageRating = ((((totalRating / (this.productDetail.rating.length * 5)) * 100) * 5) / 100);
-      console.log(Math.round(averageRating));
-      this.averageRating = Math.round(averageRating);
+      this.averageRating = this.sharedService.calculateAverageRating(this.productDetail.rating);
       this.showRating();
     })
   }

@@ -6,11 +6,13 @@
     </button>
   </mat-toolbar>
   <div class="attribute_content">
-    <div *ngIf="!distributorForm.get('distributor').controls.length && distributorsList.length" class="no_attributes">
+    <div *ngIf="!distributorForm.get('distributor')['controls'].length && distributorsList.length"
+      class="no_attributes">
       Click <strong>+</strong> button to add product distributors</div>
     <div *ngIf="!distributorsList.length" class="no_attributes">Distributors not available</div>
     <div [formGroup]="distributorForm">
-      <div formArrayName="distributor" *ngFor="let item of distributorForm.get('distributor').controls; let i = index;">
+      <div formArrayName="distributor"
+        *ngFor="let item of distributorForm.get('distributor')['controls']; let i = index;">
         <div [formGroupName]="i" class="form_elements">
 
           <mat-form-field>
@@ -24,6 +26,7 @@
               <strong>Required</strong></mat-error>
           </mat-form-field>
           <mat-form-field class="distributorPrice">
+            <span matPrefix>$ &nbsp;</span>
             <input matInput type="number" placeholder="price" formControlName="distributorPrice"
               (change)="distributorEvent()" (input)="distributorEvent()">
             <mat-error *ngIf="item.controls.distributorPrice.hasError('required')">*Price is <strong>Required</strong>
@@ -35,7 +38,7 @@
           </mat-form-field>
           <strong
             [ngStyle]="{'color':item.controls.distributorPrice.value - basePrice > 0 ? '#53d253' : 'red','padding':' 0 20px'}">
-            {{item.controls.distributorPrice.hasError('range') ? '' : item.controls.distributorPrice.value - basePrice > 0 ? '+' + (item.controls.distributorPrice.value - basePrice) : (item.controls.distributorPrice.value - basePrice)}}
+            {{item.controls.distributorPrice.hasError('range') ? '' : item.controls.distributorPrice.value - basePrice > 0 ? '+$' + (item.controls.distributorPrice.value - basePrice) : (item.controls.distributorPrice.value - basePrice)}}
           </strong>
           <button mat-button (click)="deleteDistributor(i)">
             <mat-icon class="errors">close</mat-icon>

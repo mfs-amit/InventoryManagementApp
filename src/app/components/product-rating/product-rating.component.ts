@@ -1,33 +1,25 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
 import { ServiceService } from 'src/app/shared/services/service.service';
+import { userRating } from 'src/app/shared/models/model';
 
 @Component({
   selector: 'app-product-rating',
   templateUrl: './product-rating.component.html',
   styleUrls: ['./product-rating.component.css']
 })
-export class ProductRatingComponent implements OnChanges {
-  @Input() rating: number;
-  @Output() ratingEvent = new EventEmitter<FormControl>();
-  ratingControl: FormControl;
+export class ProductRatingComponent {
+  @Input() productRatings: userRating[] = new Array<userRating>();
 
   constructor(private sharedService: ServiceService) {
-    this.ratingControl = new FormControl('', [Validators.required, this.sharedService.range(0, 5)]);
   }
 
-  ngOnChanges() {
-    if (this.rating) {
-      this.ratingControl.setValue(this.rating);
-      this.ratingControl.markAsTouched();
-      this.sendRating();
-    } else {
-      this.ratingControl.reset();
+  getRatingsArray(rating: number): number[] {
+    let ratingStars = [0, 0, 0, 0, 0];
+    if (rating) {
+      for (let i = 0; i < rating; i++) {
+        ratingStars[i] = 1;
+      }
     }
+    return ratingStars;
   }
-
-  sendRating() {
-    this.ratingEvent.emit(this.ratingControl);
-  }
-
 }

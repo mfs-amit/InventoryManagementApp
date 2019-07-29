@@ -47,19 +47,25 @@
         <span class="error_message" *ngIf="productForm.hasError('price')">
           *Base price must be less than MRP
         </span>
-        <mat-form-field>
-          <textarea matInput placeholder="Description" formControlName="description"></textarea>
-        </mat-form-field>
+        <div *ngIf="this.product._id">
+          <span class="overall_rating">Average Rating</span><br>
+          <img *ngFor="let star of ratingStars"
+            [src]="star ? '../../../assets/img/color_star.png' : '../../../assets/img/star.png'" class="rating_image">
+        </div>
       </div>
     </div>
+    <mat-form-field>
+      <textarea matInput placeholder="Description" formControlName="description"></textarea>
+    </mat-form-field>
     <app-product-attributes [attributes]="attributeInitialValue" (attributesEvent)="receiveAttributes($event)">
     </app-product-attributes>
     <app-product-distributors [mrp]="productForm.value.mrp" [basePrice]="productForm.value.price"
       [distributors]="distributorInitialValue" (distributorsEvent)="receiveDistributors($event)">
     </app-product-distributors>
+    <app-product-rating *ngIf="this.product._id" [productRatings]="product.rating"></app-product-rating>
   </div>
   <mat-toolbar class="action_buttons">
-    <button mat-raised-button class="add_button"
+    <button mat-raised-button class="add_button" *ngIf="!this.product._id"
       [disabled]="productForm.invalid || distributorFormArray.invalid || attributeFormArray.invalid || this.product._id"
       (click)="addProduct()">Add</button>
     <button mat-raised-button class="save_button" *ngIf="this.product._id"

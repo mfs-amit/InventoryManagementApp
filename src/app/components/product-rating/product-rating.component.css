@@ -9,3 +9,23 @@
 .error_message {
     color: red;
 }
+
+.rating_image {
+    width: 20px;
+    margin-right: 5px;
+    margin-top: 10px;
+}
+
+.product_rating_content table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.product_rating_content table th,td {
+    width: 30%;
+}
+
+.no_rating {
+    text-align: center;
+    margin: 15px;
+}

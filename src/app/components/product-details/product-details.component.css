@@ -62,3 +62,15 @@
 .error_message {
     color: red;
 }
+
+.overall_rating {
+    font-size: 12px;
+    font-weight: 500;
+    color: #ababab;
+}
+
+.rating_image {
+    width: 20px;
+    margin-right: 5px;
+    margin-top: 10px;
+}

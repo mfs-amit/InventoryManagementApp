@@ -24,27 +24,40 @@ export class ProductDetailsComponent implements OnInit {
   attributeFormArray: FormArray;
   distributorInitialValue: productDistributor[] = new Array<productDistributor>();
   attributeInitialValue: attribute[] = new Array<attribute>();
+  ratingStars = [0, 0, 0, 0, 0];
 
   constructor(private productService: ProductService, private distributorService: DistributorService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
-      if (result) {
-        this.product = { ...result };
-        this.productForm.patchValue({
-          name: this.product.name,
-          mrp: this.product.mrp,
-          price: this.product.price,
-          description: this.product.description
-        });
-        this.sharedService.markFormGroupTouched(this.productForm);
-        this.imageSrc = this.product.image;
-        this.distributorInitialValue = [...this.product.distributor];
-        this.attributeInitialValue = [...this.product.attribute];
+      if (result._id) {
+        this.getProductDetail(result._id);
       }
     })
   }
 
   ngOnInit() {
     this.validateProductForm();
+  }
+
+  getProductDetail(productId: string) {
+    this.productService.getProductDetail(productId).subscribe(result => {
+      this.product = { ...result };
+      this.productForm.patchValue({
+        name: this.product.name,
+        mrp: this.product.mrp,
+        price: this.product.price,
+        description: this.product.description
+      });
+      this.sharedService.markFormGroupTouched(this.productForm);
+      this.imageSrc = this.product.image;
+      this.distributorInitialValue = [...this.product.distributor];
+      this.attributeInitialValue = [...this.product.attribute];
+      this.ratingStars = [0, 0, 0, 0, 0];
+      if (this.sharedService.calculateAverageRating(this.product.rating)) {
+        for (let i = 0; i < this.sharedService.calculateAverageRating(this.product.rating); i++) {
+          this.ratingStars[i] = 1;
+        }
+      }
+    })
   }
 
   uploadImage(e) {

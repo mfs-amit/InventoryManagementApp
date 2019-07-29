@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { product, distributor } from '../models/model';
+import { product, distributor, userRating } from '../models/model';
 import { FormGroup, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
@@ -47,6 +47,15 @@ export class ServiceService {
     let base = group.controls.price.value;
 
     return base < MRP || !base || !MRP ? null : { 'price': true }
+  }
+
+  calculateAverageRating(productRatings: userRating[]): number {
+    let totalRating: number = 0;
+    productRatings.forEach(obj => {
+      totalRating = totalRating + obj.rating;
+    })
+    let averageRating = ((((totalRating / (productRatings.length * 5)) * 100) * 5) / 100);
+    return Math.round(averageRating);
   }
 
   setProductDetailsComponent(status: product) {

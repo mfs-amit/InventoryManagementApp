@@ -62,6 +62,7 @@ export class UserProductRatingComponent implements OnInit {
       this.ratingStars = [0, 0, 0, 0, 0];
       this.comments = '';
       this.sharedService.snackBarMethod('Thanks for your rating and comment.');
+      this.showRatingForm = false;
     }, err => {
       this.tostr.error('', err);
     })
