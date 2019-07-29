@@ -5,16 +5,16 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    mrp: {
+        type: Number,
+        required: true
+    },
     price: {
         type: Number,
         required: true
     },
     rating: {
-        type: Number,
-        required: true
-    },
-    quantity: {
-        type: Number,
+        type: Array,
         required: true
     },
     image: {
@@ -26,8 +26,12 @@ const productSchema = mongoose.Schema({
         required: false
     },
     distributor: {
-        type: String,
-        required: true
+        type: Array,
+        required: false
+    },
+    attribute: {
+        type: Array,
+        required: false
     }
 });
 

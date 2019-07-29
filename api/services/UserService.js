@@ -35,7 +35,7 @@ module.exports.loginUser = async function (params) {
         const validPassword = await bcrypt.compare(params.password, user.password);
         if (!validPassword) throw "Invalid credentials!";
         const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
-        return { message: "Logged in successfully", username: user.username, userType: user.userType, token: token };
+        return { message: "Logged in successfully", username: user.username, userType: user.userType, token: token, _id: user._id };
     } catch (err) {
         throw err;
     }

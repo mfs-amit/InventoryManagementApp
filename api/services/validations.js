@@ -20,12 +20,13 @@ const loginValidation = (data) => {
 const productValidation = (data) => {
     const schema = {
         name: joi.string().min(2).required(),
+        mrp: joi.number().required(),
         price: joi.number().required(),
-        rating: joi.number().required(),
-        quantity: joi.number().required(),
         image: joi.string().allow(null, '').optional(),
         description: joi.string().allow(null, '').optional(),
-        distributor: joi.string().min(2).required()
+        distributor: joi.array().optional(),
+        attribute: joi.array().optional(),
+        rating: joi.array().optional()
     }
     return joi.validate(data, schema);
 }
@@ -33,12 +34,13 @@ const productValidation = (data) => {
 const updateProductValidation = (data) => {
     const schema = {
         name: joi.string().min(2).required(),
+        mrp: joi.number().required(),
         price: joi.number().required(),
-        rating: joi.number().required(),
-        quantity: joi.number().required(),
         image: joi.string().allow(null, '').optional(),
         description: joi.string().allow(null, '').optional(),
-        distributor: joi.string().min(2).required(),
+        distributor: joi.array().optional(),
+        attribute: joi.array().optional(),
+        rating: joi.array().optional(),
         _id: joi.string().required()
     }
     return joi.validate(data, schema);

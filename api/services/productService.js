@@ -7,12 +7,13 @@ function findProductByName(name) {
 let productJSON = async function (params) {
     return {
         name: params.name,
+        mrp: params.mrp,
         price: params.price,
         rating: params.rating,
-        quantity: params.quantity,
         image: params.image,
         description: params.description,
-        distributor: params.distributor
+        distributor: params.distributor,
+        attribute: params.attribute
     };
 }
 
