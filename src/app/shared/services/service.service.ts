@@ -16,49 +16,6 @@ export class ServiceService {
 
   constructor(private snackBar: MatSnackBar) { }
 
-  markFormGroupTouched(formGroup: FormGroup | FormArray) {
-    (<any>Object).values(formGroup.controls).forEach(control => {
-      control.markAsTouched();
-      if (control.controls) {
-        this.markFormGroupTouched(control);
-      }
-    });
-  }
-
-  range(min: number, max: number): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      if (control.value !== undefined && (isNaN(control.value) || control.value < min || control.value > max)) {
-        return { 'range': true };
-      }
-      return null;
-    };
-  }
-
-  priceRange(basePrice: number, mrp: number): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      if (control.value !== undefined && (isNaN(control.value) || control.value <= basePrice || control.value > mrp)) {
-        return { 'range': true };
-      }
-      return null;
-    };
-  }
-
-  match_MRP(group: FormGroup) {
-    let MRP = group.controls.mrp.value;
-    let base = group.controls.price.value;
-
-    return base < MRP || !base || !MRP ? null : { 'price': true }
-  }
-
-  calculateAverageRating(productRatings: userRating[]): number {
-    let totalRating: number = 0;
-    productRatings.forEach(obj => {
-      totalRating = totalRating + obj.rating;
-    })
-    let averageRating = totalRating / productRatings.length;
-    return Math.round(averageRating);
-  }
-
   setProductDetailsComponent(status: product) {
     this.showProductDetailsComponent.next(status);
   }
@@ -103,5 +60,48 @@ export class ServiceService {
     this.snackBar.open(message, 'OK', {
       duration: 2000,
     });
+  }
+
+  markFormGroupTouched(formGroup: FormGroup | FormArray) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+
+  range(min: number, max: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value !== undefined && (isNaN(control.value) || control.value < min || control.value > max)) {
+        return { 'range': true };
+      }
+      return null;
+    };
+  }
+
+  priceRange(basePrice: number, mrp: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value !== undefined && (isNaN(control.value) || control.value <= basePrice || control.value > mrp)) {
+        return { 'range': true };
+      }
+      return null;
+    };
+  }
+
+  match_MRP(group: FormGroup) {
+    let MRP = group.controls.mrp.value;
+    let base = group.controls.price.value;
+
+    return base < MRP || !base || !MRP ? null : { 'price': true }
+  }
+
+  calculateAverageRating(productRatings: userRating[]): number {
+    let totalRating: number = 0;
+    productRatings.forEach(obj => {
+      totalRating = totalRating + obj.rating;
+    })
+    let averageRating = totalRating / productRatings.length;
+    return Math.round(averageRating);
   }
 }
