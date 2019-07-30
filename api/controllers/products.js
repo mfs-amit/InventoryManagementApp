@@ -71,7 +71,7 @@ router.put('/', verify, async (request, response) => {
 });
 
 /************************************** Upload image *****************************************************/
-router.post('/upload', imageUpload, (request, response) => {
+router.post('/upload', verify, imageUpload, (request, response) => {
     if (request.file) {
         response.json({ imageUrl: `http://localhost:${process.env.PORT || 3001}/images/uploads/${request.file.filename}` });
     }
