@@ -60,7 +60,6 @@ router.delete('/:id', verify, async (request, response) => {
 router.put('/', verify, async (request, response) => {
     const { error } = updateDistributorValidation(request.body);
     if (error) return response.status(400).send(error.details[0].message);
-
     try {
         const updatedDistributor = await updateDistributor(request.body);
         response.send(updatedDistributor);

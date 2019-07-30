@@ -1,9 +1,7 @@
 const router = require("express").Router();
-const multer = require('multer');
-const mkdirp = require('mkdirp');
-
 const productModel = require("../models/product");
 const verify = require("../middlewares/verifyToken");
+const imageUpload = require("../middlewares/imageUpload");
 const { productValidation, updateProductValidation } = require("../services/validations");
 const { addProduct, updateProduct } = require("../services/productService");
 
@@ -73,25 +71,12 @@ router.put('/', verify, async (request, response) => {
 });
 
 /************************************** Upload image *****************************************************/
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const dir = './public/images/uploads';
-        mkdirp(dir, err => cb(err, dir))
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname)
-    }
-});
-
-const upload = multer({ storage });
-const URL = `http://localhost:${process.env.PORT || 3001}/`;
-
-router.post('/upload', upload.single('image'), (req, res) => {
-    if (req.file) {
-        res.json({ imageUrl: `${URL}images/uploads/${req.file.filename}` });
+router.post('/upload', imageUpload, (request, response) => {
+    if (request.file) {
+        response.json({ imageUrl: `http://localhost:${process.env.PORT || 3001}/images/uploads/${request.file.filename}` });
     }
     else {
-        res.status("409").json("No Files to Upload.");
+        response.status("409").json("No Files to Upload.");
     }
 });
 
