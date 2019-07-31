@@ -104,4 +104,14 @@ export class ServiceService {
     let averageRating = totalRating / productRatings.length;
     return Math.round(averageRating);
   }
+
+  getRatingsArray(rating: number): number[] {
+    let ratingStars = [0, 0, 0, 0, 0];
+    if (rating) {
+      for (let i = 0; i < rating; i++) {
+        ratingStars[i] = 1;
+      }
+    }
+    return ratingStars;
+  }
 }

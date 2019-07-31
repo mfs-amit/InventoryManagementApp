@@ -10,7 +10,7 @@ import { ServiceService } from 'src/app/shared/services/service.service';
   styleUrls: ['./distributor-list.component.css']
 })
 export class DistributorListComponent implements OnInit {
-  distributorsList: any[] = new Array();
+  distributorsList: distributor[] = new Array<distributor>();
   selectedDistributor: number;
 
   constructor(private distributorService: DistributorService, private tostr: ToastrService, private sharedService: ServiceService) {

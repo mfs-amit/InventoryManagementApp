@@ -20,7 +20,7 @@ export class loginApiResponse {
 }
 
 export class product {
-    _id: string;
+    _id?: string;
     name: string;
     price: number;
     mrp: number;
@@ -43,32 +43,22 @@ export class product {
     }
 }
 
-export interface addProductApiRequest {
-    name: string;
-    price: number;
-    mrp: number;
-    image: string;
-    description: string;
-    attribute: attribute[];
-    rating: userRating[];
-    distributor: productDistributor[];
-}
-
 export class distributor {
-    _id: string;
+    _id?: string;
     name: string;
     email: number;
     phone: number;
     address: number;
     image: string;
-}
 
-export interface addDistributorApiRequest {
-    name: string;
-    email: number;
-    phone: number;
-    address: number;
-    image: string;
+    constructor() {
+        this._id = null;
+        this.name = null;
+        this.email = null;
+        this.phone = null;
+        this.address = null;
+        this.image = null;
+    }
 }
 
 export class ImageFile {

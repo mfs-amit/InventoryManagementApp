@@ -10,8 +10,7 @@ import { ServiceService } from 'src/app/shared/services/service.service';
 })
 export class UserProductOverviewComponent implements OnInit {
   @Input() productDetail: product;
-  ratingStars = [0, 0, 0, 0, 0];
-  averageRating: number = 0;
+  ratingStars: number[] = [0, 0, 0, 0, 0];
 
   constructor(private productService: ProductService, private sharedService: ServiceService) { }
 
@@ -19,20 +18,10 @@ export class UserProductOverviewComponent implements OnInit {
     this.getAverageRating(this.productDetail._id);
   }
 
-  showRating() {
-    this.ratingStars = [0, 0, 0, 0, 0];
-    if (this.averageRating) {
-      for (let i = 0; i < this.averageRating; i++) {
-        this.ratingStars[i] = 1;
-      }
-    }
-  }
-
   getAverageRating(productId: string) {
     this.productService.getProductDetail(productId).subscribe(result => {
       this.productDetail = { ...result };
-      this.averageRating = this.sharedService.calculateAverageRating(this.productDetail.rating);
-      this.showRating();
+      this.ratingStars = [...this.sharedService.getRatingsArray(this.sharedService.calculateAverageRating(this.productDetail.rating))];
     })
   }
 

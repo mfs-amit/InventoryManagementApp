@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { apiUrls } from 'src/environments/environment';
-import { product, addProductApiRequest } from 'src/app/shared/models/model';
+import { product } from 'src/app/shared/models/model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class ProductService {
     return this.http.get<product[]>(apiUrls.products).pipe(catchError(this.handleError));
   }
 
-  addProduct(apiRequest: addProductApiRequest): Observable<product> {
+  addProduct(apiRequest: product): Observable<product> {
     return this.http.post<product>(apiUrls.products, apiRequest).pipe(catchError(this.handleError));
   }
 

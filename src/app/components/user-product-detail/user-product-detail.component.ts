@@ -10,7 +10,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class UserProductDetailComponent implements OnInit {
   productDetail: product;
-  ratingStars = [0, 0, 0, 0, 0];
 
   constructor(private productService: ProductService, public dialogRef: MatDialogRef<UserProductDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: product) { }

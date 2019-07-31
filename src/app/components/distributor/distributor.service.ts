@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { distributor, addDistributorApiRequest } from 'src/app/shared/models/model';
+import { distributor } from 'src/app/shared/models/model';
 import { apiUrls } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
@@ -16,11 +16,11 @@ export class DistributorService {
     return this.http.get<distributor[]>(apiUrls.distributors).pipe(catchError(this.handleError));
   }
 
-  addDistributor(apiRequest: addDistributorApiRequest): Observable<distributor> {
+  addDistributor(apiRequest: distributor): Observable<distributor> {
     return this.http.post<distributor>(apiUrls.distributors, apiRequest).pipe(catchError(this.handleError));
   }
 
-  updateDistributor(apiRequest: addDistributorApiRequest): Observable<distributor> {
+  updateDistributor(apiRequest: distributor): Observable<distributor> {
     return this.http.put<distributor>(apiUrls.distributors, apiRequest).pipe(catchError(this.handleError));
   }
 

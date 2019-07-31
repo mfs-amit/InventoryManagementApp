@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UserProductRatingComponent implements OnInit {
   @Input() productDetail: product;
-  ratingStars = [0, 0, 0, 0, 0];
+  ratingStars: number[] = [0, 0, 0, 0, 0];
   ratingCount: number = 0;
   comments: string = '';
   showRatingForm: boolean = true;
@@ -27,11 +27,8 @@ export class UserProductRatingComponent implements OnInit {
   }
 
   rateProduct(rate: number) {
-    this.ratingStars = [0, 0, 0, 0, 0];
     this.ratingCount = rate;
-    for (let i = 0; i < rate; i++) {
-      this.ratingStars[i] = 1;
-    }
+    this.ratingStars = [...this.sharedService.getRatingsArray(rate)];
   }
 
   submitRating() {

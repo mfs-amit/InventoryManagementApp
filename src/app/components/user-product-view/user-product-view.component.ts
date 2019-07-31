@@ -23,6 +23,7 @@ export class UserProductViewComponent implements OnInit {
     this.productService.getProductList().subscribe(result => {
       if (result) {
         this.productsList = [...result];
+        this.productsList.reverse();
       }
     })
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { distributor, ImageFile, addDistributorApiRequest } from 'src/app/shared/models/model';
+import { distributor, ImageFile } from 'src/app/shared/models/model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DistributorService } from '../distributor/distributor.service';
 import { MatDialog } from '@angular/material';
@@ -18,7 +18,6 @@ export class DistributorDetailsComponent implements OnInit {
   distributor: distributor = new distributor();
   distributorForm: FormGroup;
   imageData: ImageFile;
-  imageSrc: string;
   distributorFormActive: boolean;
 
   constructor(private distributorService: DistributorService, private uploadService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
@@ -33,7 +32,6 @@ export class DistributorDetailsComponent implements OnInit {
         });
         this.sharedService.markFormGroupTouched(this.distributorForm);
         this.distributorForm.enable();
-        this.imageSrc = this.distributor.image;
       }
     });
     this.sharedService.getEnableDisableForm().subscribe(result => {
@@ -57,10 +55,10 @@ export class DistributorDetailsComponent implements OnInit {
         this.imageData = { file: e.target.files.item(0), uploadProgress: "0" };
         const formData = new FormData();
         formData.append("image", this.imageData.file, this.imageData.file.name);
-        return this.uploadService.uploadImage(formData)
+        this.uploadService.uploadImage(formData)
           .subscribe(event => {
             if (event.type === HttpEventType.Response) {
-              this.imageSrc = event.body.imageUrl;
+              this.distributor.image = event.body.imageUrl;
             }
           });
       }
@@ -77,17 +75,21 @@ export class DistributorDetailsComponent implements OnInit {
     })
   }
 
+  getDistributorObject(): distributor {
+    return {
+      name: this.distributorForm.value.name,
+      email: this.distributorForm.value.email,
+      phone: this.distributorForm.value.phone,
+      address: this.distributorForm.value.address,
+      image: this.distributor.image
+    }
+  }
+
   addDistributor() {
     if (this.distributorForm.invalid) {
       this.sharedService.markFormGroupTouched(this.distributorForm);
     } else {
-      let apiRequest: addDistributorApiRequest = {
-        name: this.distributorForm.value.name,
-        email: this.distributorForm.value.email,
-        phone: this.distributorForm.value.phone,
-        address: this.distributorForm.value.address,
-        image: this.imageSrc
-      }
+      let apiRequest: distributor = this.getDistributorObject();
       this.distributorService.addDistributor(apiRequest).subscribe((results: distributor) => {
         this.cancel(true);
         this.sharedService.snackBarMethod('Distributor added successfully.');
@@ -98,14 +100,8 @@ export class DistributorDetailsComponent implements OnInit {
   }
 
   updateDistributor() {
-    let apiRequest: distributor = {
-      name: this.distributorForm.value.name,
-      email: this.distributorForm.value.email,
-      phone: this.distributorForm.value.phone,
-      _id: this.distributor._id,
-      address: this.distributorForm.value.address,
-      image: this.imageSrc
-    }
+    let apiRequest: distributor = this.getDistributorObject();
+    apiRequest._id = this.distributor._id;
     this.distributorService.updateDistributor(apiRequest).subscribe((results: distributor) => {
       this.cancel(true);
       this.sharedService.snackBarMethod('Distributor updated successfully.');
@@ -116,7 +112,7 @@ export class DistributorDetailsComponent implements OnInit {
 
   alert(): void {
     const dialogRef = this.dialog.open(AlertComponent, {
-      data: this.distributor.name
+      data: { alertType: 'delete', name: this.distributor.name }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -136,7 +132,6 @@ export class DistributorDetailsComponent implements OnInit {
   }
 
   cancel(callApi: boolean) {
-    this.imageSrc = null;
     this.distributor = new distributor();
     this.sharedService.setDistributorDetailsComponent(this.distributor);
     this.sharedService.setDistributorListRefresh(callApi);
@@ -144,5 +139,4 @@ export class DistributorDetailsComponent implements OnInit {
     this.distributorForm.disable();
     this.distributorFormActive = false;
   }
-
 }

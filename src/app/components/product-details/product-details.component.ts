@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { product, addProductApiRequest, ImageFile, distributor, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
+import { product, ImageFile, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
@@ -18,13 +18,12 @@ export class ProductDetailsComponent implements OnInit {
   product: product = new product();
   productForm: FormGroup;
   imageData: ImageFile;
-  imageSrc: string;
   getDistributorApiLoaded: boolean = false;
   distributorFormArray: FormArray;
   attributeFormArray: FormArray;
   distributorInitialValue: productDistributor[] = new Array<productDistributor>();
   attributeInitialValue: attribute[] = new Array<attribute>();
-  ratingStars = [0, 0, 0, 0, 0];
+  ratingStars: number[] = [0, 0, 0, 0, 0];
   productFormActive: boolean;
 
   constructor(private productService: ProductService, private distributorService: DistributorService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
@@ -62,15 +61,9 @@ export class ProductDetailsComponent implements OnInit {
       });
       this.sharedService.markFormGroupTouched(this.productForm);
       this.productForm.enable();
-      this.imageSrc = this.product.image;
       this.distributorInitialValue = [...this.product.distributor];
       this.attributeInitialValue = [...this.product.attribute];
-      this.ratingStars = [0, 0, 0, 0, 0];
-      if (this.sharedService.calculateAverageRating(this.product.rating)) {
-        for (let i = 0; i < this.sharedService.calculateAverageRating(this.product.rating); i++) {
-          this.ratingStars[i] = 1;
-        }
-      }
+      this.ratingStars = [...this.sharedService.getRatingsArray(this.sharedService.calculateAverageRating(this.product.rating))];
     })
   }
 
@@ -83,7 +76,7 @@ export class ProductDetailsComponent implements OnInit {
         return this.productService.uploadImage(formData)
           .subscribe(event => {
             if (event.type === HttpEventType.Response) {
-              this.imageSrc = event.body.imageUrl;
+              this.product.image = event.body.imageUrl;
             }
           });
       }
@@ -116,20 +109,24 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
+  getproductObject() {
+    return {
+      name: this.productForm.value.name,
+      price: this.productForm.value.price,
+      mrp: this.productForm.value.mrp,
+      image: this.product.image ? this.product.image : '',
+      description: this.productForm.value.description,
+      attribute: this.product.attribute ? this.product.attribute : new Array<attribute>(),
+      rating: this.product.rating ? this.product.rating : new Array<userRating>(),
+      distributor: this.product.distributor ? this.product.distributor : new Array<productDistributor>(),
+    }
+  }
+
   addProduct() {
     if (this.productForm.invalid) {
       this.sharedService.markFormGroupTouched(this.productForm);
     } else {
-      let apiRequest: addProductApiRequest = {
-        name: this.productForm.value.name,
-        price: this.productForm.value.price,
-        mrp: this.productForm.value.mrp,
-        image: this.imageSrc ? this.imageSrc : '',
-        description: this.productForm.value.description,
-        attribute: this.product.attribute ? this.product.attribute : new Array<attribute>(),
-        rating: new Array<userRating>(),
-        distributor: this.product.distributor ? this.product.distributor : new Array<productDistributor>(),
-      }
+      let apiRequest: product = this.getproductObject();
       this.productService.addProduct(apiRequest).subscribe((results: product) => {
         this.cancel(true);
         this.sharedService.snackBarMethod('Product added successfully.');
@@ -140,17 +137,8 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   updateProduct() {
-    let apiRequest: product = {
-      name: this.productForm.value.name,
-      price: this.productForm.value.price,
-      _id: this.product._id,
-      mrp: this.productForm.value.mrp,
-      image: this.imageSrc ? this.imageSrc : '',
-      description: this.productForm.value.description,
-      attribute: this.product.attribute ? this.product.attribute : [],
-      rating: this.product.rating,
-      distributor: this.product.distributor
-    }
+    let apiRequest: product = this.getproductObject();
+    apiRequest._id = this.product._id;
     this.productService.updateProduct(apiRequest).subscribe((results: product) => {
       this.cancel(true);
       this.sharedService.snackBarMethod('Product updated successfully.');
@@ -161,7 +149,7 @@ export class ProductDetailsComponent implements OnInit {
 
   alert(): void {
     const dialogRef = this.dialog.open(AlertComponent, {
-      data: this.product.name
+      data: { alertType: 'delete', name: this.product.name }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -181,7 +169,6 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   cancel(callApi: boolean) {
-    this.imageSrc = null;
     this.product = new product();
     this.distributorInitialValue = new Array<productDistributor>();
     this.distributorFormArray = null;

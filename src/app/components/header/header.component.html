@@ -5,7 +5,7 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item *ngIf="userType == 'admin'" [routerLink]="['/product']">Product Manager</button>
       <button mat-menu-item *ngIf="userType == 'admin'" [routerLink]="['/distributor']">Distributor Manager</button>
-      <button mat-menu-item (click)="logout()">Logout</button>
+      <button mat-menu-item (click)="alert()">Logout</button>
     </mat-menu>
   </div>
 </mat-toolbar>

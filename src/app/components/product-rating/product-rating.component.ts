@@ -14,12 +14,6 @@ export class ProductRatingComponent {
   }
 
   getRatingsArray(rating: number): number[] {
-    let ratingStars = [0, 0, 0, 0, 0];
-    if (rating) {
-      for (let i = 0; i < rating; i++) {
-        ratingStars[i] = 1;
-      }
-    }
-    return ratingStars;
+    return this.sharedService.getRatingsArray(rating);
   }
 }

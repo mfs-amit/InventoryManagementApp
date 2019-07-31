@@ -9,7 +9,7 @@
         <label for="image">
           <input id="image" style="display:none;" type="file" accept="image/*" formControlName="image"
             (change)="uploadImage($event)" />
-          <img [src]="imageSrc ? imageSrc : '../../../assets/img/upload.png'" class="upload_image">
+          <img [src]="product.image ? product.image : '../../../assets/img/upload.png'" class="upload_image">
         </label>
       </div>
       <div class="col-md-6 form_area">
