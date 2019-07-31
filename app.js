@@ -2,18 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
-/******************************** Environment setup **********************************/
 const dotEnv = require("dotenv");
+const routes = require("./config/routes");
+
+const app = express();
+const port = process.env.PORT || 3001;
 
 dotEnv.config();
-
-/*********************************Initiallize App *************************************/
-var app = express();
-
-const users = require("./api/controllers/users");
-const products = require("./api/controllers/products");
-const distributors = require("./api/controllers/distributors");
 
 /******************************* connection to mongoDB ********************************/
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true });
@@ -29,12 +24,7 @@ mongoose.connection.on("error", (err) => {
 app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use("/api/users", users);
-app.use("/api/products", products);
-app.use("/api/distributors", distributors);
-
-/************************************* Port Number **************************************/
-const port = process.env.PORT || 3001;
+app.use("/api", routes);
 
 /********************************** Testing NodeJS App **********************************/
 app.get("/", (req, res) => {
