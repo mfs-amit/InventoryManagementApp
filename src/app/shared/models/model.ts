@@ -92,3 +92,8 @@ export interface userRating {
     userId: string;
     userName: string;
 }
+
+export interface alertData {
+    alertType: string;
+    name: string;
+}
