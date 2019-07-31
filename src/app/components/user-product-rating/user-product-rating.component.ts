@@ -1,20 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { product, userRating } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-product-rating',
   templateUrl: './user-product-rating.component.html',
   styleUrls: ['./user-product-rating.component.css']
 })
-export class UserProductRatingComponent implements OnInit {
+export class UserProductRatingComponent implements OnInit, OnDestroy {
   @Input() productDetail: product;
   ratingStars: number[] = [0, 0, 0, 0, 0];
   ratingCount: number = 0;
   comments: string = '';
   showRatingForm: boolean = true;
+  private subscription: Subscription = new Subscription();
 
   constructor(private productService: ProductService, private sharedService: ServiceService, private tostr: ToastrService) { }
 
@@ -54,14 +56,20 @@ export class UserProductRatingComponent implements OnInit {
       rating: productDetails.rating,
       distributor: productDetails.distributor
     }
-    this.productService.updateProduct(apiRequest).subscribe((results: product) => {
-      this.ratingCount = 0;
-      this.ratingStars = [0, 0, 0, 0, 0];
-      this.comments = '';
-      this.sharedService.snackBarMethod('Thanks for your rating and comment.');
-      this.showRatingForm = false;
-    }, err => {
-      this.tostr.error('', err);
-    })
+    this.subscription.add(
+      this.productService.updateProduct(apiRequest).subscribe((results: product) => {
+        this.ratingCount = 0;
+        this.ratingStars = [0, 0, 0, 0, 0];
+        this.comments = '';
+        this.sharedService.snackBarMethod('Thanks for your rating and comment.');
+        this.showRatingForm = false;
+      }, err => {
+        this.tostr.error('', err);
+      })
+    )
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

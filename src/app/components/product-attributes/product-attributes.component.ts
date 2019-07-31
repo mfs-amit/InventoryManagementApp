@@ -1,28 +1,32 @@
-import { Component, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, AbstractControl, FormControl, Validators } from '@angular/forms';
 import { attribute } from 'src/app/shared/models/model';
 import { ServiceService } from 'src/app/shared/services/service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-attributes',
   templateUrl: './product-attributes.component.html',
   styleUrls: ['./product-attributes.component.css']
 })
-export class ProductAttributesComponent implements OnChanges {
+export class ProductAttributesComponent implements OnChanges, OnDestroy {
   attributesForm: FormGroup;
   @Input() attributes: attribute[];
   @Output() attributesEvent = new EventEmitter<FormArray>();
   showAddButton: boolean;
+  private subscription: Subscription = new Subscription();
 
   constructor(private formBuilder: FormBuilder, private sharedService: ServiceService) {
     this.attributeFormValidation();
-    this.sharedService.getEnableDisableForm().subscribe(result => {
-      if (result) {
-        this.showAddButton = true;
-      } else {
-        this.showAddButton = false;
-      }
-    });
+    this.subscription.add(
+      this.sharedService.getEnableDisableForm().subscribe(result => {
+        if (result) {
+          this.showAddButton = true;
+        } else {
+          this.showAddButton = false;
+        }
+      })
+    );
   }
 
   attributeFormValidation() {
@@ -82,5 +86,9 @@ export class ProductAttributesComponent implements OnChanges {
 
   attributeEvent() {
     this.attributesEvent.emit(this.getAttribute());
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

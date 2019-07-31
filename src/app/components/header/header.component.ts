@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { AlertComponent } from '../alert/alert.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   userName: string;
   userType: string;
   pageUrl: string;
+  private subscription: Subscription = new Subscription();
 
   constructor(private router: Router, private toastr: ToastrService, public dialog: MatDialog) {
-    router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.pageUrl = event.url;
-      }
-    });
+    this.subscription.add(
+      router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.pageUrl = event.url;
+        }
+      })
+    );
   }
 
   ngOnInit() {
@@ -32,11 +36,13 @@ export class HeaderComponent implements OnInit {
       data: { alertType: 'logout', name: '' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.logout();
-      }
-    });
+    this.subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.logout();
+        }
+      })
+    );
   }
 
   logout() {
@@ -45,4 +51,7 @@ export class HeaderComponent implements OnInit {
     this.toastr.success('', 'Logged out Successfully');
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

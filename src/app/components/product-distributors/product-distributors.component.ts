@@ -1,15 +1,16 @@
-import { Component, OnChanges, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnChanges, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { distributor, productDistributor } from 'src/app/shared/models/model';
 import { DistributorService } from '../distributor/distributor.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-distributors',
   templateUrl: './product-distributors.component.html',
   styleUrls: ['./product-distributors.component.css']
 })
-export class ProductDistributorsComponent implements OnInit, OnChanges {
+export class ProductDistributorsComponent implements OnInit, OnChanges, OnDestroy {
   distributorForm: FormGroup;
   @Input() distributors: productDistributor[];
   @Input() mrp: number = 0;
@@ -17,16 +18,19 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
   @Output() distributorsEvent = new EventEmitter<FormArray>();
   distributorsList: distributor[] = new Array<distributor>();
   showAddButton: boolean;
+  private subscription: Subscription = new Subscription();
 
   constructor(private formBuilder: FormBuilder, private distributorService: DistributorService, private sharedService: ServiceService) {
     this.distributorFormValidation();
-    this.sharedService.getEnableDisableForm().subscribe(result => {
-      if (result) {
-        this.showAddButton = true;
-      } else {
-        this.showAddButton = false;
-      }
-    });
+    this.subscription.add(
+      this.sharedService.getEnableDisableForm().subscribe(result => {
+        if (result) {
+          this.showAddButton = true;
+        } else {
+          this.showAddButton = false;
+        }
+      })
+    );
   }
 
   ngOnInit() {
@@ -43,9 +47,11 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
   }
 
   getDistributorsList() {
-    this.distributorService.getDistributorList().subscribe(result => {
-      this.distributorsList = [...result];
-    })
+    this.subscription.add(
+      this.distributorService.getDistributorList().subscribe(result => {
+        this.distributorsList = [...result];
+      })
+    )
   }
 
   distributorFormValidation() {
@@ -98,4 +104,7 @@ export class ProductDistributorsComponent implements OnInit, OnChanges {
     this.distributorsEvent.emit(this.getDistributor());
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

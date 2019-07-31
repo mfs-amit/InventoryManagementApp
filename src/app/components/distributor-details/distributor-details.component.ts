@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { distributor, ImageFile } from 'src/app/shared/models/model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DistributorService } from '../distributor/distributor.service';
@@ -8,20 +8,22 @@ import { ToastrService } from 'ngx-toastr';
 import { ProductService } from '../product/product.service';
 import { HttpEventType } from '@angular/common/http';
 import { AlertComponent } from '../alert/alert.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-distributor-details',
   templateUrl: './distributor-details.component.html',
   styleUrls: ['./distributor-details.component.css']
 })
-export class DistributorDetailsComponent implements OnInit {
+export class DistributorDetailsComponent implements OnInit, OnDestroy {
   distributor: distributor = new distributor();
   distributorForm: FormGroup;
   imageData: ImageFile;
   distributorFormActive: boolean;
+  private subscription: Subscription = new Subscription();
 
   constructor(private distributorService: DistributorService, private uploadService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
-    this.sharedService.getDistributorDetailsComponent().subscribe((result: distributor) => {
+    this.subscription.add(this.sharedService.getDistributorDetailsComponent().subscribe((result: distributor) => {
       if (result) {
         this.distributor = { ...result };
         this.distributorForm.patchValue({
@@ -33,14 +35,14 @@ export class DistributorDetailsComponent implements OnInit {
         this.sharedService.markFormGroupTouched(this.distributorForm);
         this.distributorForm.enable();
       }
-    });
-    this.sharedService.getEnableDisableForm().subscribe(result => {
+    }));
+    this.subscription.add(this.sharedService.getEnableDisableForm().subscribe(result => {
       if (result) {
         this.cancel(false);
         this.distributorForm.enable();
         this.distributorFormActive = true;
       }
-    })
+    }));
   }
 
   ngOnInit() {
@@ -55,12 +57,12 @@ export class DistributorDetailsComponent implements OnInit {
         this.imageData = { file: e.target.files.item(0), uploadProgress: "0" };
         const formData = new FormData();
         formData.append("image", this.imageData.file, this.imageData.file.name);
-        this.uploadService.uploadImage(formData)
-          .subscribe(event => {
-            if (event.type === HttpEventType.Response) {
-              this.distributor.image = event.body.imageUrl;
-            }
-          });
+        this.subscription.add(this.uploadService.uploadImage(formData).subscribe(event => {
+          if (event.type === HttpEventType.Response) {
+            this.distributor.image = event.body.imageUrl;
+          }
+        })
+        );
       }
     }
   }
@@ -90,24 +92,28 @@ export class DistributorDetailsComponent implements OnInit {
       this.sharedService.markFormGroupTouched(this.distributorForm);
     } else {
       let apiRequest: distributor = this.getDistributorObject();
-      this.distributorService.addDistributor(apiRequest).subscribe((results: distributor) => {
-        this.cancel(true);
-        this.sharedService.snackBarMethod('Distributor added successfully.');
-      }, err => {
-        this.tostr.error('', err);
-      })
+      this.subscription.add(
+        this.distributorService.addDistributor(apiRequest).subscribe((results: distributor) => {
+          this.cancel(true);
+          this.sharedService.snackBarMethod('Distributor added successfully.');
+        }, err => {
+          this.tostr.error('', err);
+        })
+      )
     }
   }
 
   updateDistributor() {
     let apiRequest: distributor = this.getDistributorObject();
     apiRequest._id = this.distributor._id;
-    this.distributorService.updateDistributor(apiRequest).subscribe((results: distributor) => {
-      this.cancel(true);
-      this.sharedService.snackBarMethod('Distributor updated successfully.');
-    }, err => {
-      this.tostr.error('', err);
-    })
+    this.subscription.add(
+      this.distributorService.updateDistributor(apiRequest).subscribe((results: distributor) => {
+        this.cancel(true);
+        this.sharedService.snackBarMethod('Distributor updated successfully.');
+      }, err => {
+        this.tostr.error('', err);
+      })
+    )
   }
 
   alert(): void {
@@ -115,20 +121,24 @@ export class DistributorDetailsComponent implements OnInit {
       data: { alertType: 'delete', name: this.distributor.name }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.deleteDistributor();
-      }
-    });
+    this.subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.deleteDistributor();
+        }
+      })
+    )
   }
 
   deleteDistributor() {
-    this.distributorService.deleteDistributor(this.distributor._id).subscribe((results: distributor) => {
-      this.cancel(true);
-      this.sharedService.snackBarMethod('Distributor deleted successfully.');
-    }, err => {
-      this.tostr.error('', err);
-    })
+    this.subscription.add(
+      this.distributorService.deleteDistributor(this.distributor._id).subscribe((results: distributor) => {
+        this.cancel(true);
+        this.sharedService.snackBarMethod('Distributor deleted successfully.');
+      }, err => {
+        this.tostr.error('', err);
+      })
+    )
   }
 
   cancel(callApi: boolean) {
@@ -138,5 +148,9 @@ export class DistributorDetailsComponent implements OnInit {
     this.distributorForm.reset();
     this.distributorForm.disable();
     this.distributorFormActive = false;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

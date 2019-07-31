@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DistributorService } from '../distributor/distributor.service';
 import { distributor } from 'src/app/shared/models/model';
 import { ToastrService } from 'ngx-toastr';
 import { ServiceService } from 'src/app/shared/services/service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-distributor-list',
   templateUrl: './distributor-list.component.html',
   styleUrls: ['./distributor-list.component.css']
 })
-export class DistributorListComponent implements OnInit {
+export class DistributorListComponent implements OnInit, OnDestroy {
   distributorsList: distributor[] = new Array<distributor>();
   selectedDistributor: number;
+  private subscription: Subscription = new Subscription();
 
   constructor(private distributorService: DistributorService, private tostr: ToastrService, private sharedService: ServiceService) {
-    this.sharedService.getDistributorListRefresh().subscribe((result: boolean) => {
-      this.selectedDistributor = null;
-      if (result == true) {
-        this.getDistributorList();
-      }
-    })
+    this.subscription.add(
+      this.sharedService.getDistributorListRefresh().subscribe((result: boolean) => {
+        this.selectedDistributor = null;
+        if (result == true) {
+          this.getDistributorList();
+        }
+      })
+    )
   }
 
   ngOnInit() {
@@ -31,12 +35,14 @@ export class DistributorListComponent implements OnInit {
   }
 
   getDistributorList() {
-    this.distributorService.getDistributorList().subscribe((results: distributor[]) => {
-      this.distributorsList = [...results];
-      this.distributorsList.reverse();
-    }, err => {
-      this.tostr.error('', err);
-    })
+    this.subscription.add(
+      this.distributorService.getDistributorList().subscribe((results: distributor[]) => {
+        this.distributorsList = [...results];
+        this.distributorsList.reverse();
+      }, err => {
+        this.tostr.error('', err);
+      })
+    )
   }
 
   selectDistributor(index: number) {
@@ -44,4 +50,7 @@ export class DistributorListComponent implements OnInit {
     this.sharedService.setDistributorDetailsComponent(this.distributorsList[index]);
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

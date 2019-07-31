@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { product, ImageFile, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
@@ -7,13 +7,14 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { HttpEventType } from '@angular/common/http';
 import { AlertComponent } from '../alert/alert.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, OnDestroy {
   product: product = new product();
   productForm: FormGroup;
   imageData: ImageFile;
@@ -24,23 +25,28 @@ export class ProductDetailsComponent implements OnInit {
   attributeInitialValue: attribute[] = new Array<attribute>();
   ratingStars: number[] = [0, 0, 0, 0, 0];
   productFormActive: boolean;
+  private subscription: Subscription = new Subscription();
 
   constructor(private productService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
-    this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
-      if (result._id) {
-        this.getProductDetail(result._id);
-      }
-    });
-    this.sharedService.getEnableDisableForm().subscribe(result => {
-      if (result) {
-        this.cancel(false);
-        this.productForm.enable();
-        this.productFormActive = true;
-      } else {
-        this.productForm.disable();
-        this.productFormActive = false;
-      }
-    });
+    this.subscription.add(
+      this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
+        if (result._id) {
+          this.getProductDetail(result._id);
+        }
+      })
+    );
+    this.subscription.add(
+      this.sharedService.getEnableDisableForm().subscribe(result => {
+        if (result) {
+          this.cancel(false);
+          this.productForm.enable();
+          this.productFormActive = true;
+        } else {
+          this.productForm.disable();
+          this.productFormActive = false;
+        }
+      })
+    );
   }
 
   ngOnInit() {
@@ -50,20 +56,22 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getProductDetail(productId: string) {
-    this.productService.getProductDetail(productId).subscribe(result => {
-      this.product = { ...result };
-      this.productForm.patchValue({
-        name: this.product.name,
-        mrp: this.product.mrp,
-        price: this.product.price,
-        description: this.product.description
-      });
-      this.sharedService.markFormGroupTouched(this.productForm);
-      this.productForm.enable();
-      this.distributorInitialValue = [...this.product.distributor];
-      this.attributeInitialValue = [...this.product.attribute];
-      this.ratingStars = [...this.sharedService.getRatingsArray(this.sharedService.calculateAverageRating(this.product.rating))];
-    })
+    this.subscription.add(
+      this.productService.getProductDetail(productId).subscribe(result => {
+        this.product = { ...result };
+        this.productForm.patchValue({
+          name: this.product.name,
+          mrp: this.product.mrp,
+          price: this.product.price,
+          description: this.product.description
+        });
+        this.sharedService.markFormGroupTouched(this.productForm);
+        this.productForm.enable();
+        this.distributorInitialValue = [...this.product.distributor];
+        this.attributeInitialValue = [...this.product.attribute];
+        this.ratingStars = [...this.sharedService.getRatingsArray(this.sharedService.calculateAverageRating(this.product.rating))];
+      })
+    )
   }
 
   uploadImage(e) {
@@ -72,12 +80,13 @@ export class ProductDetailsComponent implements OnInit {
         this.imageData = { file: e.target.files.item(0), uploadProgress: "0" };
         const formData = new FormData();
         formData.append("image", this.imageData.file, this.imageData.file.name);
-        return this.productService.uploadImage(formData)
-          .subscribe(event => {
+        this.subscription.add(
+          this.productService.uploadImage(formData).subscribe(event => {
             if (event.type === HttpEventType.Response) {
               this.product.image = event.body.imageUrl;
             }
-          });
+          })
+        );
       }
     }
   }
@@ -126,24 +135,28 @@ export class ProductDetailsComponent implements OnInit {
       this.sharedService.markFormGroupTouched(this.productForm);
     } else {
       let apiRequest: product = this.getproductObject();
-      this.productService.addProduct(apiRequest).subscribe((results: product) => {
-        this.cancel(true);
-        this.sharedService.snackBarMethod('Product added successfully.');
-      }, err => {
-        this.tostr.error('', err);
-      })
+      this.subscription.add(
+        this.productService.addProduct(apiRequest).subscribe((results: product) => {
+          this.cancel(true);
+          this.sharedService.snackBarMethod('Product added successfully.');
+        }, err => {
+          this.tostr.error('', err);
+        })
+      )
     }
   }
 
   updateProduct() {
     let apiRequest: product = this.getproductObject();
     apiRequest._id = this.product._id;
-    this.productService.updateProduct(apiRequest).subscribe((results: product) => {
-      this.cancel(true);
-      this.sharedService.snackBarMethod('Product updated successfully.');
-    }, err => {
-      this.tostr.error('', err);
-    })
+    this.subscription.add(
+      this.productService.updateProduct(apiRequest).subscribe((results: product) => {
+        this.cancel(true);
+        this.sharedService.snackBarMethod('Product updated successfully.');
+      }, err => {
+        this.tostr.error('', err);
+      })
+    )
   }
 
   alert(): void {
@@ -151,20 +164,24 @@ export class ProductDetailsComponent implements OnInit {
       data: { alertType: 'delete', name: this.product.name }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.deleteProduct();
-      }
-    });
+    this.subscription.add(
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.deleteProduct();
+        }
+      })
+    );
   }
 
   deleteProduct() {
-    this.productService.deleteProduct(this.product._id).subscribe((results: product) => {
-      this.cancel(true);
-      this.sharedService.snackBarMethod('Product deleted successfully.');
-    }, err => {
-      this.tostr.error('', err);
-    })
+    this.subscription.add(
+      this.productService.deleteProduct(this.product._id).subscribe((results: product) => {
+        this.cancel(true);
+        this.sharedService.snackBarMethod('Product deleted successfully.');
+      }, err => {
+        this.tostr.error('', err);
+      })
+    )
   }
 
   cancel(callApi: boolean) {
@@ -177,5 +194,9 @@ export class ProductDetailsComponent implements OnInit {
     this.sharedService.setProductListRefresh(callApi);
     this.productForm.reset();
     this.sharedService.setEnableDisableForm(false);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
