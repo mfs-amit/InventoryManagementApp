@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { HttpEventType } from '@angular/common/http';
 import { AlertComponent } from '../alert/alert.component';
-import { DistributorService } from '../distributor/distributor.service';
 
 @Component({
   selector: 'app-product-details',
@@ -26,7 +25,7 @@ export class ProductDetailsComponent implements OnInit {
   ratingStars: number[] = [0, 0, 0, 0, 0];
   productFormActive: boolean;
 
-  constructor(private productService: ProductService, private distributorService: DistributorService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
+  constructor(private productService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
       if (result._id) {
         this.getProductDetail(result._id);
@@ -109,7 +108,7 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  getproductObject() {
+  getproductObject(): product {
     return {
       name: this.productForm.value.name,
       price: this.productForm.value.price,
