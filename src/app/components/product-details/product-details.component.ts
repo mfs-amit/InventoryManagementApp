@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { product, ImageFile, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
+import { product, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
 import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
@@ -17,7 +17,6 @@ import { Subscription } from 'rxjs';
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   product: product = new product();
   productForm: FormGroup;
-  imageData: ImageFile;
   getDistributorApiLoaded: boolean = false;
   distributorFormArray: FormArray;
   attributeFormArray: FormArray;
@@ -29,7 +28,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private productService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
     this.subscription.add(
-      this.sharedService.getProductDetailsComponent().subscribe((result: product) => {
+      this.sharedService.getDetailsComponent().subscribe((result: product) => {
         if (result._id) {
           this.getProductDetail(result._id);
         }
@@ -77,16 +76,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   uploadImage(e) {
     if (e.target.files.length > 0) {
       if (e.target.files.item(0).name.match(/\.(jpg|jpeg|png|gif)$/)) {
-        this.imageData = { file: e.target.files.item(0), uploadProgress: "0" };
         const formData = new FormData();
-        formData.append("image", this.imageData.file, this.imageData.file.name);
-        this.subscription.add(
-          this.productService.uploadImage(formData).subscribe(event => {
-            if (event.type === HttpEventType.Response) {
-              this.product.image = event.body.imageUrl;
-            }
-          })
-        );
+        formData.append("image", e.target.files.item(0), e.target.files.item(0).name);
+        this.subscription.add(this.productService.uploadImage(formData).subscribe(event => {
+          if (event.type === HttpEventType.Response) {
+            this.product.image = event.body.imageUrl;
+          }
+        }, err => {
+          this.tostr.error('', err);
+        }));
       }
     }
   }
@@ -190,8 +188,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.distributorFormArray = null;
     this.attributeInitialValue = new Array<attribute>();
     this.attributeFormArray = null;
-    this.sharedService.setProductDetailsComponent(this.product);
-    this.sharedService.setProductListRefresh(callApi);
+    this.sharedService.setDetailsComponent(this.product);
+    this.sharedService.setListRefresh(callApi);
     this.productForm.reset();
     this.sharedService.setEnableDisableForm(false);
   }

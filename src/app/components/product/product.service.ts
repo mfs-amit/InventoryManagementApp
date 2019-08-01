@@ -36,7 +36,7 @@ export class ProductService {
     return this.http.post(apiUrls.uploadImage, formData, {
       reportProgress: true,
       observe: "events"
-    })
+    }).pipe(catchError(this.handleError));
   }
 
   private handleError(errorResponse: HttpErrorResponse) {

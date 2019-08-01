@@ -17,7 +17,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor(private productService: ProductService, private sharedService: ServiceService, private tostr: ToastrService) {
     this.subscription.add(
-      this.sharedService.getProductListRefresh().subscribe((result: boolean) => {
+      this.sharedService.getListRefresh().subscribe((result: boolean) => {
         this.selectedProduct = null;
         if (result == true) {
           this.getProductList();
@@ -43,7 +43,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   selectProduct(index: number) {
     this.selectedProduct = index;
-    this.sharedService.setProductDetailsComponent(this.productsList[index]);
+    this.sharedService.setDetailsComponent(this.productsList[index]);
   }
 
   addProduct() {

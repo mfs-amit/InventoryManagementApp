@@ -8,44 +8,26 @@ import { MatSnackBar } from '@angular/material';
   providedIn: 'root'
 })
 export class ServiceService {
-  private showProductDetailsComponent = new Subject<product>();
-  private refreshProductList = new Subject<boolean>();
-  private showDistributorDetailsComponent = new Subject<distributor>();
-  private refreshDistributorList = new Subject<boolean>();
+  private showDetailsComponent = new Subject<product | distributor>();
+  private refreshList = new Subject<boolean>();
   private enableDisableForm = new Subject<boolean>();
 
   constructor(private snackBar: MatSnackBar) { }
 
-  setProductDetailsComponent(status: product) {
-    this.showProductDetailsComponent.next(status);
+  setDetailsComponent(status: product | distributor) {
+    this.showDetailsComponent.next(status);
   }
 
-  getProductDetailsComponent(): Observable<product> {
-    return this.showProductDetailsComponent.asObservable();
+  getDetailsComponent(): Observable<product | distributor> {
+    return this.showDetailsComponent.asObservable();
   }
 
-  setProductListRefresh(status: boolean) {
-    this.refreshProductList.next(status);
+  setListRefresh(status: boolean) {
+    this.refreshList.next(status);
   }
 
-  getProductListRefresh(): Observable<boolean> {
-    return this.refreshProductList.asObservable();
-  }
-
-  setDistributorDetailsComponent(status: distributor) {
-    this.showDistributorDetailsComponent.next(status);
-  }
-
-  getDistributorDetailsComponent(): Observable<distributor> {
-    return this.showDistributorDetailsComponent.asObservable();
-  }
-
-  setDistributorListRefresh(status: boolean) {
-    this.refreshDistributorList.next(status);
-  }
-
-  getDistributorListRefresh(): Observable<boolean> {
-    return this.refreshDistributorList.asObservable();
+  getListRefresh(): Observable<boolean> {
+    return this.refreshList.asObservable();
   }
 
   setEnableDisableForm(status: boolean) {

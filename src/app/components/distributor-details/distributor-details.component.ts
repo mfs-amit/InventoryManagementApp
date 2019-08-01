@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { distributor, ImageFile } from 'src/app/shared/models/model';
+import { distributor } from 'src/app/shared/models/model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DistributorService } from '../distributor/distributor.service';
 import { MatDialog } from '@angular/material';
@@ -18,12 +18,11 @@ import { Subscription } from 'rxjs';
 export class DistributorDetailsComponent implements OnInit, OnDestroy {
   distributor: distributor = new distributor();
   distributorForm: FormGroup;
-  imageData: ImageFile;
   distributorFormActive: boolean;
   private subscription: Subscription = new Subscription();
 
   constructor(private distributorService: DistributorService, private uploadService: ProductService, public dialog: MatDialog, private sharedService: ServiceService, private tostr: ToastrService) {
-    this.subscription.add(this.sharedService.getDistributorDetailsComponent().subscribe((result: distributor) => {
+    this.subscription.add(this.sharedService.getDetailsComponent().subscribe((result: distributor) => {
       if (result) {
         this.distributor = { ...result };
         this.distributorForm.patchValue({
@@ -54,15 +53,13 @@ export class DistributorDetailsComponent implements OnInit, OnDestroy {
   uploadImage(e) {
     if (e.target.files.length > 0) {
       if (e.target.files.item(0).name.match(/\.(jpg|jpeg|png|gif)$/)) {
-        this.imageData = { file: e.target.files.item(0), uploadProgress: "0" };
         const formData = new FormData();
-        formData.append("image", this.imageData.file, this.imageData.file.name);
+        formData.append("image", e.target.files.item(0), e.target.files.item(0).name);
         this.subscription.add(this.uploadService.uploadImage(formData).subscribe(event => {
           if (event.type === HttpEventType.Response) {
             this.distributor.image = event.body.imageUrl;
           }
-        })
-        );
+        }));
       }
     }
   }
@@ -143,8 +140,8 @@ export class DistributorDetailsComponent implements OnInit, OnDestroy {
 
   cancel(callApi: boolean) {
     this.distributor = new distributor();
-    this.sharedService.setDistributorDetailsComponent(this.distributor);
-    this.sharedService.setDistributorListRefresh(callApi);
+    this.sharedService.setDetailsComponent(this.distributor);
+    this.sharedService.setListRefresh(callApi);
     this.distributorForm.reset();
     this.distributorForm.disable();
     this.distributorFormActive = false;

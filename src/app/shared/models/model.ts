@@ -61,11 +61,6 @@ export class distributor {
     }
 }
 
-export class ImageFile {
-    file: File;
-    uploadProgress: string;
-}
-
 export class attribute {
     attributeKey: string;
     attributeValue: string;

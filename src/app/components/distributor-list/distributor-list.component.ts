@@ -17,7 +17,7 @@ export class DistributorListComponent implements OnInit, OnDestroy {
 
   constructor(private distributorService: DistributorService, private tostr: ToastrService, private sharedService: ServiceService) {
     this.subscription.add(
-      this.sharedService.getDistributorListRefresh().subscribe((result: boolean) => {
+      this.sharedService.getListRefresh().subscribe((result: boolean) => {
         this.selectedDistributor = null;
         if (result == true) {
           this.getDistributorList();
@@ -47,7 +47,7 @@ export class DistributorListComponent implements OnInit, OnDestroy {
 
   selectDistributor(index: number) {
     this.selectedDistributor = index;
-    this.sharedService.setDistributorDetailsComponent(this.distributorsList[index]);
+    this.sharedService.setDetailsComponent(this.distributorsList[index]);
   }
 
   ngOnDestroy() {

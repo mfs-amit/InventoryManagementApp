@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -15,17 +15,13 @@ export class HttpsInterceptorService implements HttpInterceptor {
     if (localStorage.getItem('token')) {
       req = req.clone({ headers: req.headers.set('auth-token', localStorage.getItem('token')) });
     }
-    return next.handle(req).pipe(tap(res => {
-      if (res instanceof HttpResponse) {
+    return next.handle(req).pipe(catchError((error: HttpErrorResponse) => {
+      if (error.status == 401) {
+        localStorage.clear();
+        this.router.navigate(['/login']);
+        this.toastr.error('', error.error);
       }
-    }, err => {
-      if (err instanceof HttpErrorResponse) {
-        if (err.status == 401) {
-          localStorage.clear();
-          this.router.navigate(['/login']);
-          this.toastr.error('', err.error);
-        }
-      }
+      return throwError(error);
     }));
   }
 }
