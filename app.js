@@ -21,7 +21,11 @@ mongoose.connection.on("error", (err) => {
 });
 
 /********************************** adding middleware ***********************************/
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use("/api", routes);

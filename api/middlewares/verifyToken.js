@@ -8,6 +8,6 @@ module.exports = function (req, res, next) {
         req.user = verified;
         next();
     } catch (errors) {
-        res.status(401).send('Invalid Token');
+        res.status(401).send('Access Denied');
     }
 }
