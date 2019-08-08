@@ -4,8 +4,8 @@ const verify = require("../middlewares/verifyToken");
 const imageUpload = require("../middlewares/imageUpload");
 const { productValidation, updateProductValidation } = require("../services/validations");
 const { addProduct, updateProduct, calculateAverageRating } = require("../services/productService");
-var nconf = require('nconf');
-nconf.file({ file: '.config/config.json' });
+const config = require('config');
+const KEYS = config.get('KEYS');
 
 /************************** API to add product *******************************************************/
 router.post("/", verify, async (request, response) => {
@@ -74,7 +74,7 @@ router.put('/', verify, async (request, response) => {
 /************************************** Upload image *****************************************************/
 router.post('/upload', verify, imageUpload, (request, response) => {
     if (request.file) {
-        response.json({ imageUrl: `http://localhost:${nconf.get('PORT') || 3001}/images/uploads/${request.file.filename}` });
+        response.json({ imageUrl: `http://localhost:${KEYS.PORT || 3001}/images/uploads/${request.file.filename}` });
     }
     else {
         response.status("409").json("No Files to Upload.");

@@ -1,8 +1,8 @@
 const userModel = require('../models/user');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-var nconf = require('nconf');
-nconf.file({ file: '.config/config.json' });
+const config = require('config');
+const KEYS = config.get('KEYS');
 
 function findUserByName(username) {
     return userModel.findOne({ username: username });
@@ -48,7 +48,7 @@ module.exports.loginUser = async function (params) {
         if (!user) throw 'User is not Registered!';
         const validPassword = await bcrypt.compare(params.password, user.password);
         if (!validPassword) throw "Invalid credentials!";
-        const token = jwt.sign({ _id: user._id }, nconf.get('SECRET_KEY'));
+        const token = jwt.sign({ _id: user._id }, KEYS.SECRET_KEY);
         return { message: "Logged in successfully", username: user.username, userType: user.userType, token: token, _id: user._id };
     } catch (err) {
         throw err;
