@@ -9,7 +9,7 @@ router.post("/register", async (request, response) => {
         const registerResponse = await registerUser(request.body);
         response.send(registerResponse);
     } catch (errors) {
-        response.status(400).send(errors);
+        response.status(500).send(errors);
     }
 });
 
@@ -20,7 +20,7 @@ router.post("/login", async (request, response) => {
         const loginResponse = await loginUser(request.body);
         response.send(loginResponse);
     } catch (errors) {
-        response.status(400).send(errors);
+        response.status(500).send(errors);
     }
 });
 

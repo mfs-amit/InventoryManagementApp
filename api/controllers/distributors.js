@@ -12,7 +12,7 @@ router.post("/", verify, async (request, response) => {
         const savedDistributor = await addDistributor(request.body);
         response.send({ message: "Distributor added successfully.", data: savedDistributor });
     } catch (error) {
-        response.status(400).send(error);
+        response.status(500).send(error);
     }
 });
 
@@ -22,37 +22,33 @@ router.get('/', verify, async (request, response) => {
         let distributorList = await distributorModel.find();
         response.send(distributorList);
     } catch (error) {
-        response.status(400).send("Something went wrong!");
+        response.status(500).send(error);
     }
 });
 
 /***********************************API to get distributor by id ********************************************/
 router.get('/:id', verify, async (request, response) => {
     try {
-        distributorModel.findById(request.params.id, (err, result) => {
-            if (result) {
-                response.send(result);
-            } else {
-                response.status(400).send('Distributor not found!');
-            }
-        });
+        distributorModel.findById(request.params.id).then(result => {
+            response.send(result);
+        }).catch(error => {
+            response.status(400).send('Distributor not found!');
+        })
     } catch (error) {
-        response.status(400).send("Something went wrong!");
+        response.status(500).send(error);
     }
 });
 
 /************************************API to delete distributor by id *************************************/
 router.delete('/:id', verify, async (request, response) => {
     try {
-        distributorModel.findByIdAndDelete(request.params.id, (err, result) => {
-            if (result) {
-                response.send({ messgae: 'Distributor deleted successfully.' });
-            } else {
-                response.status(400).send('Distributor not found!');
-            }
-        });
+        distributorModel.findByIdAndDelete(request.params.id).then(result => {
+            response.send({ messgae: 'Distributor deleted successfully.' });
+        }).catch(error => {
+            response.status(400).send('Distributor not found!');
+        })
     } catch (error) {
-        response.status(400).send("Something went wrong!");
+        response.status(500).send(error);
     }
 });
 
@@ -64,7 +60,7 @@ router.put('/', verify, async (request, response) => {
         const updatedDistributor = await updateDistributor(request.body);
         response.send(updatedDistributor);
     } catch (error) {
-        response.status(400).send(error);
+        response.status(500).send(error);
     }
 });
 

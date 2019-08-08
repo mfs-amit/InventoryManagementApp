@@ -4,7 +4,7 @@ function findDistributorByEmail(email) {
     return distributorModel.findOne({ email: email });
 };
 
-let distributorJSON = async function (params) {
+let distributorJSON = (params) => {
     return {
         name: params.name,
         email: params.email,
@@ -18,8 +18,7 @@ module.exports.addDistributor = async function (params) {
     try {
         const distributor = await findDistributorByEmail(params.email);
         if (distributor) throw `'${params.email}' already exist!`;
-        const savedDistributor = await new distributorModel(await distributorJSON(params)).save();
-        if (savedDistributor) return savedDistributor;
+        return await new distributorModel(await distributorJSON(params)).save();
     } catch (err) {
         throw err;
     }
@@ -28,14 +27,12 @@ module.exports.addDistributor = async function (params) {
 module.exports.updateDistributor = async function (params) {
     try {
         const distributor = await findDistributorByEmail(params.email);
-        if (distributor && distributor.email != params.email) throw `'${params.email}' already exist!`;
-        distributorModel.updateOne({ _id: params._id }, { $set: await distributorJSON(params) }, (err, result) => {
-            if (result) {
-                return { message: 'Distributor updated successfully.' };
-            } else {
-                throw 'Distributor not found!';
-            }
-        });
+        if (distributor && distributor._id != params._id) throw `'${params.email}' already exist!`;
+        distributorModel.updateOne({ _id: params._id }, { $set: await distributorJSON(params) }).then(result => {
+            return { message: 'Distributor updated successfully.' };
+        }).catch(error => {
+            throw 'Distributor not found!';
+        })
     } catch (err) {
         throw err;
     }
