@@ -1,4 +1,4 @@
-<div class="product_details subBoxex">
+<div class="product_details subBoxex" [ngStyle]="{'opacity':productFormActive ? 1 : 0.5}">
   <mat-toolbar color="primary" class="subHeader">
     <span>Product Details</span>
     <span>{{product?.name}}</span>
@@ -10,6 +10,8 @@
           <input id="image" style="display:none;" type="file" accept="image/*" formControlName="image"
             (change)="uploadImage($event)" />
           <img [src]="product.image ? product.image : '../../../assets/img/upload.png'" class="upload_image">
+          <br>
+          <span *ngIf="!product.image">Upload Image</span>
         </label>
       </div>
       <div class="col-md-6 form_area">
@@ -73,6 +75,7 @@
       [disabled]="productForm.invalid || distributorFormArray.invalid || attributeFormArray.invalid"
       (click)="updateProduct()">Save</button>
     <button mat-raised-button class="delete_button" *ngIf="this.product._id" (click)="alert()">Delete</button>
-    <button mat-raised-button class="cancel_button" *ngIf="this.product._id || productFormActive" (click)="cancel(false)">Cancel</button>
+    <button mat-raised-button class="cancel_button" *ngIf="this.product._id || productFormActive"
+      (click)="cancel(false)">Cancel</button>
   </mat-toolbar>
 </div>

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { product } from 'src/app/shared/models/model';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -44,6 +44,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectProduct(index: number) {
     this.selectedProduct = index;
     this.sharedService.setDetailsComponent(this.productsList[index]);
+    this.sharedService.setEnableDisableForm(true);
   }
 
   addProduct() {

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { product, userRating } from 'src/app/shared/models/model';
-import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { ProductService } from '../../product/product.service';
 
 @Component({
   selector: 'app-user-product-rating',

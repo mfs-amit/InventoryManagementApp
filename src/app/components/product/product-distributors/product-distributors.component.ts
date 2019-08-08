@@ -1,9 +1,9 @@
 import { Component, OnChanges, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { distributor, productDistributor } from 'src/app/shared/models/model';
-import { DistributorService } from '../distributor/distributor.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { Subscription } from 'rxjs';
+import { DistributorService } from '../../distributor/distributor.service';
 
 @Component({
   selector: 'app-product-distributors',

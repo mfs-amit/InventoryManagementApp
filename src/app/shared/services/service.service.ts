@@ -78,13 +78,10 @@ export class ServiceService {
     return base < MRP || !base || !MRP ? null : { 'price': true }
   }
 
-  calculateAverageRating(productRatings: userRating[]): number {
-    let totalRating: number = 0;
-    productRatings.forEach(obj => {
-      totalRating = totalRating + obj.rating;
-    })
-    let averageRating = totalRating / productRatings.length;
-    return Math.round(averageRating);
+  matchPassword(c: AbstractControl): { passwordMatched: boolean } {
+    if (c.get('password').value !== c.get('confirmPassword').value) {
+      return { passwordMatched: true };
+    }
   }
 
   getRatingsArray(rating: number): number[] {

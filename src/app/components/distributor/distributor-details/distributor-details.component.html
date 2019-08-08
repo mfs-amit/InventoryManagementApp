@@ -1,4 +1,4 @@
-<div class="distributor_details subBoxex">
+<div class="distributor_details subBoxex" [ngStyle]="{'opacity':distributorFormActive ? 1 : 0.5}">
   <mat-toolbar color="primary" class="subHeader">
     <span>Distributor Details</span>
     <span>{{distributor?.name}}</span>
@@ -10,6 +10,8 @@
           <input id="image" style="display:none;" type="file" accept="image/*" formControlName="image"
             (change)="uploadImage($event)" />
           <img [src]="distributor.image ? distributor.image : '../../../assets/img/upload.png'" class="upload_image">
+          <br>
+          <span *ngIf="!distributor.image">Upload Image</span>
         </label>
       </div>
       <div class="col-md-6 form_area">

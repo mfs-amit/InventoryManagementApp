@@ -1,0 +1,45 @@
+<div class="register">
+  <mat-card class="register_box">
+    <mat-toolbar color="primary">Register</mat-toolbar>
+    <div class="register_form">
+      <form [formGroup]="registerForm">
+        <mat-form-field>
+          <input matInput autocomplete="off" placeholder="Username" type="text" formControlName="username">
+          <mat-error
+            *ngIf="registerForm.controls.username.hasError('pattern') && !registerForm.controls.username.hasError('required')">
+            *Please enter a valid username
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls.username.hasError('required')">
+            *Username is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Password" type="password" formControlName="password">
+          <mat-error
+            *ngIf="registerForm.controls.password.hasError('pattern') && !registerForm.controls.password.hasError('required')">
+            *Please enter a valid password
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls.password.hasError('required')">
+            *Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword">
+          <mat-error
+            *ngIf="registerForm.controls.confirmPassword.hasError('pattern') && !registerForm.controls.confirmPassword.hasError('required')">
+            *Please enter a valid password
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls.confirmPassword.hasError('required')">
+            *Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-error
+          *ngIf="registerForm.hasError('passwordMatched') && registerForm.controls.confirmPassword.value && registerForm.controls.password.value">
+          *Password and confirm password must be same
+        </mat-error>
+        <button mat-raised-button (click)="register()"
+          [disabled]="showLoadding">{{showLoadding ? "Please wait.." : "Register"}}</button>
+      </form>
+    </div>
+  </mat-card>
+</div>

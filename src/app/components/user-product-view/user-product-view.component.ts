@@ -3,8 +3,8 @@ import { ProductService } from '../product/product.service';
 import { product } from 'src/app/shared/models/model';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { UserProductDetailComponent } from '../user-product-detail/user-product-detail.component';
 import { Subscription } from 'rxjs';
+import { UserProductDetailComponent } from './user-product-detail/user-product-detail.component';
 
 @Component({
   selector: 'app-user-product-view',

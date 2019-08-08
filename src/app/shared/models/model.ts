@@ -3,6 +3,12 @@ export interface loginApiRequest {
     password: string;
 }
 
+export interface registerApiRequest {
+    username: string;
+    password: string;
+    userType: string;
+}
+
 export class loginApiResponse {
     message: string;
     token: string;
@@ -26,6 +32,7 @@ export class product {
     mrp: number;
     image: string;
     description: string;
+    averageRating?: number;
     attribute: attribute[];
     rating: userRating[];
     distributor: productDistributor[];

@@ -1,43 +1,28 @@
-.login {
+.register {
     display: flex;
     justify-content: center;
     padding: 10%;
 }
 
-.login_box {
+.register_box {
     padding: 0;
     width: 60%;
     overflow: hidden;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 }
 
-.login_form {
+.register_form {
     padding: 20px;
 }
 
-.login_form mat-form-field {
+.register_form mat-form-field {
     width: 100%;
     margin-top: 10px;
 }
 
-.login_form button {
+.register_form button {
     width: 100%;
     color: #FFFFFF;
     background-color: #4CAF50;
     margin-top: 20px;
-}
-.register_link{
-    padding: 10px 0;
-    text-align: center;
-    border-top: 1px solid #f1f1f1;
-}
-
-.register_link a{
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.register_link span{
-    color: gray;
-    font-size: 13px;
 }

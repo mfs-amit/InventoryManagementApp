@@ -30,5 +30,8 @@
           [disabled]="showLoadding">{{showLoadding ? "Please wait.." : "Login"}}</button>
       </form>
     </div>
+    <div class="register_link">
+      <span>Don't have an account? </span><a [routerLink]="['/register']">Register Now</a>
+    </div>
   </mat-card>
 </div>

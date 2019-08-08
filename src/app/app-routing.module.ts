@@ -7,9 +7,11 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { DistributorComponent } from './components/distributor/distributor.component';
 import { LoginGuardGuard } from './shared/guards/login-guard.guard';
 import { UserProductViewComponent } from './components/user-product-view/user-product-view.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
+  { path: "register", component: RegisterComponent },
   { path: "login", component: LoginComponent, canActivate: [LoginGuardGuard] },
   { path: "product", component: ProductComponent, canActivate: [AuthGuardGuard] },
   { path: "distributor", component: DistributorComponent, canActivate: [AuthGuardGuard] },

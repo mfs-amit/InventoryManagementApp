@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { apiUrls } from 'src/environments/environment';
 import { product } from 'src/app/shared/models/model';
+import { apiUrls } from 'src/assets/config/config';
 
 @Injectable({
   providedIn: 'root'

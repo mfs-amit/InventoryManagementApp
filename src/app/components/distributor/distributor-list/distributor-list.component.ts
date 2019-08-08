@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DistributorService } from '../distributor/distributor.service';
 import { distributor } from 'src/app/shared/models/model';
 import { ToastrService } from 'ngx-toastr';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { Subscription } from 'rxjs';
+import { DistributorService } from '../distributor.service';
 
 @Component({
   selector: 'app-distributor-list',

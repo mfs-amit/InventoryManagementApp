@@ -7,13 +7,7 @@ export const environment = {
 };
 
 export const baseUrl = 'http://localhost:3001/api/';
-export const apiUrls = {
-  login: baseUrl + 'users/login',
-  logout: baseUrl + 'users/logout',
-  products: baseUrl + 'products',
-  distributors: baseUrl + 'distributors',
-  uploadImage: baseUrl + 'products/upload'
-}
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

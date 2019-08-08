@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { product } from 'src/app/shared/models/model';
-import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { Subscription } from 'rxjs';
+import { ProductService } from '../../product/product.service';
 
 @Component({
   selector: 'app-user-product-overview',
@@ -24,7 +24,7 @@ export class UserProductOverviewComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.productService.getProductDetail(productId).subscribe(result => {
         this.productDetail = { ...result };
-        this.ratingStars = [...this.sharedService.getRatingsArray(this.sharedService.calculateAverageRating(this.productDetail.rating))];
+        this.ratingStars = [...this.sharedService.getRatingsArray(this.productDetail.averageRating)];
       })
     )
   }

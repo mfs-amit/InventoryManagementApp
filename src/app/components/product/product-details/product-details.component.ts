@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { product, attribute, userRating, productDistributor } from 'src/app/shared/models/model';
-import { ProductService } from '../product/product.service';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material';
 import { HttpEventType } from '@angular/common/http';
-import { AlertComponent } from '../alert/alert.component';
 import { Subscription } from 'rxjs';
+import { ProductService } from '../product.service';
+import { AlertComponent } from '../../alert/alert.component';
 
 @Component({
   selector: 'app-product-details',
@@ -65,10 +65,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
           description: this.product.description
         });
         this.sharedService.markFormGroupTouched(this.productForm);
+        this.productFormActive = true;
         this.productForm.enable();
         this.distributorInitialValue = [...this.product.distributor];
         this.attributeInitialValue = [...this.product.attribute];
-        this.ratingStars = [...this.sharedService.getRatingsArray(this.sharedService.calculateAverageRating(this.product.rating))];
+        this.ratingStars = [...this.sharedService.getRatingsArray(this.product.averageRating)];
       })
     )
   }

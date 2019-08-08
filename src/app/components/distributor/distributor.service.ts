@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { distributor } from 'src/app/shared/models/model';
-import { apiUrls } from 'src/environments/environment';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
+import { apiUrls } from 'src/assets/config/config';
 
 @Injectable({
   providedIn: 'root'

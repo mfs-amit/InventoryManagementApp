@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ProductService } from '../product/product.service';
 import { product } from 'src/app/shared/models/model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ProductService } from '../../product/product.service';
 
 @Component({
   selector: 'app-user-product-detail',

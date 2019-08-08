@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { distributor } from 'src/app/shared/models/model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { DistributorService } from '../distributor/distributor.service';
 import { MatDialog } from '@angular/material';
 import { ServiceService } from 'src/app/shared/services/service.service';
 import { ToastrService } from 'ngx-toastr';
-import { ProductService } from '../product/product.service';
 import { HttpEventType } from '@angular/common/http';
-import { AlertComponent } from '../alert/alert.component';
 import { Subscription } from 'rxjs';
+import { DistributorService } from '../distributor.service';
+import { ProductService } from '../../product/product.service';
+import { AlertComponent } from '../../alert/alert.component';
 
 @Component({
   selector: 'app-distributor-details',
@@ -33,6 +33,7 @@ export class DistributorDetailsComponent implements OnInit, OnDestroy {
         });
         this.sharedService.markFormGroupTouched(this.distributorForm);
         this.distributorForm.enable();
+        this.distributorFormActive = true;
       }
     }));
     this.subscription.add(this.sharedService.getEnableDisableForm().subscribe(result => {
