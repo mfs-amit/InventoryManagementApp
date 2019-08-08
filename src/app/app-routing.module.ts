@@ -11,7 +11,7 @@ import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
-  { path: "register", component: RegisterComponent },
+  { path: "register", component: RegisterComponent, canActivate: [LoginGuardGuard] },
   { path: "login", component: LoginComponent, canActivate: [LoginGuardGuard] },
   { path: "product", component: ProductComponent, canActivate: [AuthGuardGuard] },
   { path: "distributor", component: DistributorComponent, canActivate: [AuthGuardGuard] },
